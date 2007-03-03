@@ -1,0 +1,22 @@
+% while (my $Ticket = $Tickets->Next()) {
+<% $RT::WebURL %>/Ticket/Display.html?id=<% $Ticket->Id %><%"\t"%><% $Ticket->Id %><%"\t"%><% $Ticket->Subject |n %><%"\t"%><% $Ticket->Status |n %>
+% }
+% $m->abort();
+<%INIT>
+$Dist =~ s/::/-/g;
+
+$r->content_type('text/plain');
+
+my $public = RT::CurrentUser->new();
+$public->LoadByName($RT::WebPublicUser);
+
+my $Tickets = RT::Tickets->new($public);
+$Tickets->LimitQueue( VALUE => $Dist );
+$Tickets->LimitStatus( VALUE => 'open' );
+$Tickets->LimitStatus( VALUE => 'new' );
+$Tickets->LimitStatus( VALUE => 'stalled' );
+</%INIT>
+
+<%ARGS>
+$Dist => undef
+</%ARGS>

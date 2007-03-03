@@ -1,0 +1,33 @@
+<%init>
+if (    $session{'CurrentUser'}->Name eq $RT::WebPublicUser
+     or defined $session{'BitcardUser'} )
+{
+    # This is a public user, we only want them going to /Public/
+    #
+    # The following logic is very similar to the priv/unpriv logic
+    #
+    my $path = $m->request_comp->path;
+    
+    # if the user is trying to access a ticket, redirect them
+    if ( $path =~ '^(/+)Ticket/Display.html'
+            and $ARGS{'id'} )
+    {
+        $m->redirect($RT::WebPath . "/Public/Bug/Display.html?id="
+                        . $m->interp->apply_escapes($ARGS{'id'}));
+        $m->abort();
+    }
+    
+    elsif ( $path =~ '^(/+)Dist/Display.html' and $ARGS{'Queue'} ) {
+        $m->redirect($RT::WebPath . "/Public/Dist/Display.html?Name="
+                        . $m->interp->apply_escapes($ARGS{'Queue'}));
+    }
+    
+    # otherwise, drop the user at the Public default page
+    elsif (    $path !~ '^(/+)Public/'
+           and $path !~ '^(/+)NoAuth/'
+           and $path !~ '^(/+)Ticket/Attachment/') {
+        $m->redirect($RT::WebPath . "/Public/");
+        $m->abort();
+    }
+}
+</%init>

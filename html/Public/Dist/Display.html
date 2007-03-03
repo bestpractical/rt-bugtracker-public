@@ -1,0 +1,91 @@
+<& /Elements/Header, Title => $Status . ' bugs for ' . $Name &>
+<& /Public/Elements/Tabs,
+      Title => $Status . ' bugs for ' . $Name,
+      queue => $Name,
+      current_tab => '/Public/Browse.html',
+      current_subtab => $current_subtab
+      &>
+
+<h3>Maintainer</h3>
+
+<p><% $maint %></p>
+
+<h3>Bugs</h3>
+
+<%perl>
+if ($Status eq 'Active') {
+    $m->comp('/Elements/TicketList',
+            OrderBy => $OrderBy,
+            Order   => $Order,
+            Query   => "Queue = '" . $m->interp->apply_escapes($Name) . "' "
+                        . "AND ( Status = 'new' OR Status = 'open' "
+                        . "OR Status = 'stalled' )",
+            Format  => $Format,
+            Rows => $Rows,
+            Page => $Page,
+            Name => $Name,
+            AllowSorting => 1,
+            BaseURL => $base_url,
+    );
+}
+else {
+    $m->comp('/Elements/TicketList',
+            OrderBy => $OrderBy,
+            Order   => $Order,
+            Query   => "Queue = '" . $m->interp->apply_escapes($Name) . "' "
+                        . "AND Status = '" . $Status . q{'},
+            Format  => $Format,
+            Rows => $Rows,
+            Page => $Page,
+            Name => $Name,
+            AllowSorting => 1,
+            BaseURL => $base_url,
+    );
+}
+</%perl>
+
+<%init>
+$Name =~ s/::/-/g;
+
+my $Format = <<EOF;
+'<a href="$RT::WebPath/Ticket/Display.html?id=__id__">__id__</a>/TITLE:ID',
+'<b><a href="$RT::WebPath/Ticket/Display.html?id=__id__">__Subject__</a></b>/TITLE:Subject',
+'__Status__',
+'__CustomField.{Severity}__',
+'<small>__LastUpdatedRelative__</small>',
+'__CustomField.{Broken in}__',
+'__CustomField.{Fixed in}__'
+EOF
+
+my $queue = RT::Queue->new($session{CurrentUser});
+$queue->Load($Name);
+
+if (not $queue->Id) {
+    $m->comp('/Public/Elements/ErrorNoDist', Queue => $Name, %ARGS);
+    $m->abort();
+}
+
+if ($Status !~ /\w/) {
+    $m->comp('/Elements/Error', Why => q{no such status as '} . $Status . q{'});
+    $m->abort();
+}
+
+my $admincc = $queue->AdminCc->UserMembersObj;
+my $maint = join ", ", map { $_->Name } @{$admincc->ItemsArrayRef};
+
+my $current_subtab = "Public/Dist/Display.html?Status="
+                  . $m->interp->apply_escapes($Status) . "&Name="
+                  . $m->interp->apply_escapes($queue->Name);
+
+my ($base_url) = ($current_subtab =~ m|^Public/Dist/(.+)$|);
+$base_url .= '&';
+
+</%init>
+<%args>
+$Name => undef
+$Order => 'DESC'
+$OrderBy => 'LastUpdated'
+$Rows => undef
+$Page => 1
+$Status => 'Active'
+</%args>

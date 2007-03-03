@@ -1,0 +1,11 @@
+The public user should probably be unprivileged and have the following rights
+
+    CreateTicket
+    ModifyCustomField
+    ReplyToTicket
+    SeeCustomField
+    SeeQueue
+    ShowTicket
+
+if you want the public UI to do anything useful.  It should NOT have the
+ModifySelf right.

@@ -1,0 +1,19 @@
+<%init>
+# If there's no user and this is not a login request and we're looking
+# at a public UI request, log in automatically as the public user so the
+# person can get the rights of the system group "Everyone"
+if (    not $session{'CurrentUser'}
+    and not defined $ARGS{user}
+    and not defined $ARGS{pass} )
+{
+    if ( $m->request_comp->path =~ m{ ^/+Public/ }x ) {
+        $session{'CurrentUser'} = RT::CurrentUser->new();
+        $session{'CurrentUser'}->LoadByName($RT::WebPublicUser);
+    }
+    elsif ( $m->request_comp->path =~ '^(/+)Ticket/Display.html'
+                and $ARGS{'id'} )
+    {
+        $m->redirect( '/Public/Bug/Display.html?id=' . $ARGS{'id'} );
+    }
+}
+</%init>

@@ -1,0 +1,13 @@
+abstract: Adds a public, (hopefully) userfriendly bug tracking UI to RT
+author: Thomas Sibley <trs@bestpractical.com>
+distribution_type: module
+generated_by: Module::Install version 0.63
+license: GPL version 2
+name: RT-BugTracker-Public
+no_index: 
+  directory: 
+    - etc
+    - html
+    - inc
+    - t
+version: 0.01

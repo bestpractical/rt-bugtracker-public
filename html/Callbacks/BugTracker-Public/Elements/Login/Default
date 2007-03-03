@@ -1,0 +1,5 @@
+<div class="input-row">
+  Don't have an account but want to browse bugs?
+  Use the <a href="<% $RT::WebBaseURL %>/Public/?nossl=true">public interface</a>.
+  Want to report a bug?  Send it in via e-mail.
+</div>
