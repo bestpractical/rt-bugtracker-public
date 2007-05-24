@@ -1,3 +1,11 @@
+Make sure to create the public user in your RT system and add the line below
+to your RT_SiteConfig.pm.
+
+Set( $WebPublicUser, 'guest' );
+
+If you didn't name your public user 'guest', then change accordingly.
+
+
 The public user should probably be unprivileged and have the following rights
 
     CreateTicket
@@ -9,3 +17,4 @@ The public user should probably be unprivileged and have the following rights
 
 if you want the public UI to do anything useful.  It should NOT have the
 ModifySelf right.
+
