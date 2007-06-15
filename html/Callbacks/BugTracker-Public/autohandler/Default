@@ -1,6 +1,6 @@
 <%init>
 if (    $session{'CurrentUser'}->Name eq $RT::WebPublicUser
-     or defined $session{'BitcardUser'} )
+     or defined $session{'BitcardUser'} or defined $session->{'CurrentUser'}->{'OpenID'} )
 {
     # This is a public user, we only want them going to /Public/
     #
