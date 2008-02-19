@@ -2,7 +2,7 @@
 %# 
 %# COPYRIGHT:
 %#  
-%# This software is Copyright (c) 1996-2005 Best Practical Solutions, LLC 
+%# This software is Copyright (c) 1996-2007 Best Practical Solutions, LLC 
 %#                                          <jesse@bestpractical.com>
 %# 
 %# (Except where explicitly superseded by other copyright notices)
@@ -22,7 +22,9 @@
 %# 
 %# You should have received a copy of the GNU General Public License
 %# along with this program; if not, write to the Free Software
-%# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+%# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+%# 02110-1301 or visit their web page on the internet at
+%# http://www.gnu.org/copyleft/gpl.html.
 %# 
 %# 
 %# CONTRIBUTION SUBMISSION POLICY:
@@ -47,31 +49,37 @@
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title><%$Title%></title>
-% if ($Refresh > 0) {
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+<title><%$Title%></title>
+
+% if ($Refresh && $Refresh > 0) {
     <meta http-equiv="refresh" content="<%$Refresh%>" />
 % }
-    <link rel="shortcut icon" href="<%$RT::WebImagesURL%>/favicon.png" type="image/png" />
-    <link rel="stylesheet" href="<%$RT::WebPath%>/NoAuth/css/<% $RT::WebDefaultStylesheet %>/main.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="<%$RT::WebPath%>/NoAuth/css/print.css" type="text/css" media="print" />
-% if ($RSSAutoDiscovery) {
+
+<link rel="shortcut icon" href="<%$RT::WebImagesURL%>/favicon.png" type="image/png" />
+<link rel="stylesheet" href="<%$RT::WebPath%>/NoAuth/css/<% $RT::WebDefaultStylesheet %>/main-squished.css" type="text/css" media="all" />
+<link rel="stylesheet" href="<%$RT::WebPath%>/NoAuth/css/print.css" type="text/css" media="print" />
+
+% if ( $RSSAutoDiscovery ) {
     <link rel="alternate" href="<%$RSSAutoDiscovery%>" type="application/rss+xml" title="RSS RT Search" />
 % }
-    <script type="text/javascript" src="<%$RT::WebPath%>/NoAuth/js/util.js"></script>
-    <script type="text/javascript" src="<%$RT::WebPath%>/NoAuth/js/titlebox-state.js"></script>
-    <script type="text/javascript"><!--
-        onLoadHook("loadTitleBoxStates()");
-% if ($Focus) {
-        onLoadHook("focusElementById('<% $Focus %>')");
+
+<script type="text/javascript" src="<%$RT::WebPath%>/NoAuth/js/util.js"></script>
+<script type="text/javascript" src="<%$RT::WebPath%>/NoAuth/js/titlebox-state.js"></script>
+<script type="text/javascript"><!--
+    onLoadHook("loadTitleBoxStates()");
+% if ( $Focus ) {
+    onLoadHook("focusElementById('<% $Focus %>')");
 % }
-% if ($onload) {
-        onLoadHook("<% $onload |n %>");
+% if ( $onload ) {
+    onLoadHook("<% $onload |n %>");
 % }
-    --></script>
+--></script>
+
 <& /Elements/Callback, _CallbackName => 'Head', %ARGS &>
-  </head>
+
+</head>
   <body<% $id && qq[ id="comp-$id"] |n %>>
 
 % if ($ShowBar) {
@@ -95,7 +103,7 @@
 % else {
     <&|/l&>Not logged in.</&>
 % }
-%if (    $session{'CurrentUser'}->Id
+% if (    $session{'CurrentUser'}->Id
 %    and $session{'CurrentUser'}->HasRight( Right => 'ModifySelf', Object => $RT::System )) {
     | <a href="<%$RT::WebPath%><%$Prefs%>"><&|/l&>Preferences</&></a>
 % }
