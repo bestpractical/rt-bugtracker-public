@@ -45,16 +45,39 @@
 # those contributions and any derivatives thereof.
 # 
 # END BPS TAGGED BLOCK }}}
-=head1 COPYRIGHT
-
-This extension is Copyright (C) 2005 Best Practical Solutions, LLC.
-
-It is freely redistributable under the terms of version 2 of the GNU GPL.
-
-=cut
-
 package RT::BugTracker::Public;
 
 our $VERSION = '0.01';
 
 1;
+
+=head1 NAME
+
+RT::BugTracker::Public - Adds a public, (hopefully) userfriendly bug tracking UI to RT
+
+=head1 CONFIGURATION
+
+Make sure to create the public user in your RT system and add the line below
+to your RT_SiteConfig.pm.
+
+    Set( $WebPublicUser, 'guest' );
+
+If you didn't name your public user 'guest', then change accordingly.
+
+The public user should probably be unprivileged and have the following rights
+
+    CreateTicket
+    ModifyCustomField
+    ReplyToTicket
+    SeeCustomField
+    SeeQueue
+    ShowTicket
+
+If you want the public UI to do anything useful. It should NOT have the
+ModifySelf right.
+
+=head1 AUTHOR
+
+Thomas Sibley E<lt>trs@bestpractical.comE<gt>
+
+=cut
