@@ -57,8 +57,26 @@ RT::BugTracker::Public - Adds a public, (hopefully) userfriendly bug tracking UI
 
 =head1 CONFIGURATION
 
+You can find F<local/etc/BugTracker-Public/RT_SiteConfig.pm> with example of
+configuration and sane defaults. Add require in the main F<RT_SiteConfig.pm> or
+define options there.
+
+=head2 NoAuthRegexp
+
+As public shouldn't require authentication then you should add '/Public/' path
+to NoAuthRegexp option, something like:
+
+    Set($WebNoAuthRegex, qr!^(?:/+NoAuth/|
+                                /+Public/|
+                                /+REST/\d+\.\d+/NoAuth/)!x );
+
+Note that if you have multiple extensions that want to change this option then
+you have to merge them manually into one perl regular expression.
+
+=head2 WebPublicUser
+
 Make sure to create the public user in your RT system and add the line below
-to your RT_SiteConfig.pm.
+to your F<RT_SiteConfig.pm>.
 
     Set( $WebPublicUser, 'guest' );
 
