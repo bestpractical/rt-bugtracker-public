@@ -54,8 +54,13 @@ if (    not $session{'CurrentUser'}
     and not defined $ARGS{pass} )
 {
     if ( $m->request_comp->path =~ m{ ^/+Public/ }x ) {
-        $session{'CurrentUser'} = RT::CurrentUser->new();
-        $session{'CurrentUser'}->LoadByName($RT::WebPublicUser);
+        my $cu = new RT::CurrentUser;
+        $cu->LoadByName( $RT::WebPublicUser );
+        unless ( $cu->id ) {
+            $RT::Logger->error("Couldn't load public user with name '$RT::WebPublicUser'");
+        } else {
+            $session{'CurrentUser'} = $cu;
+        }
     }
     elsif ( $m->request_comp->path =~ '^(/+)Ticket/Display.html'
                 and $ARGS{'id'} )
