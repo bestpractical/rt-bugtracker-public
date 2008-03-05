@@ -47,7 +47,8 @@
 # END BPS TAGGED BLOCK }}}
 package RT::BugTracker::Public;
 
-our $VERSION = '0.01';
+use v5.8.3;
+our $VERSION = '0.02';
 
 1;
 
