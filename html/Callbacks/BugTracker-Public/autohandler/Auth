@@ -65,7 +65,7 @@ if (    not $session{'CurrentUser'}
     elsif ( $m->request_comp->path =~ '^(/+)Ticket/Display.html'
                 and $ARGS{'id'} )
     {
-        $m->redirect( '/Public/Bug/Display.html?id=' . $ARGS{'id'} );
+        $m->redirect( $RT::WebPath .'/Public/Bug/Display.html?id=' . $ARGS{'id'} );
     }
 }
 </%init>

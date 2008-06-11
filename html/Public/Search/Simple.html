@@ -87,14 +87,14 @@ if ($q) {
         my $queue = RT::Queue->new( $session{'CurrentUser'} );
         $queue->Load($q);
         if ($queue->id) { 
-            $m->redirect( '/Public/Dist/Display.html?Name=' . $m->interp->apply_escapes($q, 'u') );
+            $m->redirect( $RT::WebPath .'/Public/Dist/Display.html?Name=' . $m->interp->apply_escapes($q, 'u') );
             $m->abort();
         }
 
         my $user = RT::User->new( $session{'CurrentUser'} );
         $user->Load($q);
         if ($user->id) {
-            $m->redirect( '/Public/Dist/ByMaintainer.html?Name=' . $m->interp->apply_escapes($q, 'u') );
+            $m->redirect( $RT::WebPath .'/Public/Dist/ByMaintainer.html?Name=' . $m->interp->apply_escapes($q, 'u') );
             $m->abort();
         }
     }
