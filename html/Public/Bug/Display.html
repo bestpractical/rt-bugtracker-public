@@ -160,7 +160,7 @@ if (@Actions) {
     # resubmission on refresh.
     # But we need to store Actions somewhere too, so we don't lose them.
     $session{"Actions"} = \@Actions;
-    $m->redirect($RT::WebURL."/Ticket/Display.html?id=".$TicketObj->id);
+    $m->redirect( $RT::WebPath ."/Ticket/Display.html?id=".$TicketObj->id);
     $RT::Logger->crit("Set up the redirect");
     $m->abort();
     $RT::Logger->crit("Aborted. Should never be called");
