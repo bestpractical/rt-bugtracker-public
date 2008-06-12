@@ -53,9 +53,7 @@
     current_subtab => $current_subtab,
 &>
 
-<h3>Maintainer</h3>
-
-<p><% $maint %></p>
+<& /Dist/Elements/ShowMaintainers, Queue => $queue &>
 
 <h3>Bugs</h3>
 
@@ -116,9 +114,6 @@ if ($Status !~ /\w/) {
     $m->comp('/Elements/Error', Why => q{no such status as '} . $Status . q{'});
     $m->abort();
 }
-
-my $admincc = $queue->AdminCc->UserMembersObj;
-my $maint = join ", ", map { $_->Name } @{$admincc->ItemsArrayRef};
 
 my $current_subtab = "Public/Dist/Display.html?Status="
                   . $m->interp->apply_escapes($Status, 'u') . "&Name="
