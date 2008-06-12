@@ -47,11 +47,11 @@
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => $Status . ' bugs for ' . $Name &>
 <& /Public/Elements/Tabs,
-      Title => $Status . ' bugs for ' . $Name,
-      queue => $Name,
-      current_tab => '/Public/Browse.html',
-      current_subtab => $current_subtab
-      &>
+    Title => loc( "$Status bugs for [_1]", $Name ),
+    queue => $Name,
+    current_tab => '/Public/Browse.html',
+    current_subtab => $current_subtab,
+&>
 
 <h3>Maintainer</h3>
 
