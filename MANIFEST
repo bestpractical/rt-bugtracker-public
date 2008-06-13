@@ -4,6 +4,7 @@ html/Callbacks/BugTracker-Public/autohandler/Auth
 html/Callbacks/BugTracker-Public/autohandler/Default
 html/Callbacks/BugTracker-Public/Elements/Login/Default
 html/Elements/Header
+html/Public/autohandler
 html/Public/Browse.html
 html/Public/Bug/Display.html
 html/Public/Bug/Elements/ShowGroupMembers
