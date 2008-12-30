@@ -46,8 +46,9 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <%init>
+# we don't redirect Bitcard users as those can be authors as well
 if (    $session{'CurrentUser'}->Name eq ($RT::WebPublicUser||'')
-     or defined $session{'BitcardUser'} or defined $session{'CurrentUser'}->{'OpenID'} )
+     or defined $session{'CurrentUser'}->{'OpenID'} )
 {
     # This is a public user, we only want them going to /Public/
     #
