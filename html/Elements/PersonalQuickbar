@@ -1,5 +1,6 @@
 <%ARGS>
 $Prefs => '/User/Prefs.html'
+$URL => undef
 </%ARGS>
 <%INIT>
 use URI::Escape;
