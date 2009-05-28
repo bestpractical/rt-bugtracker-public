@@ -1,0 +1,50 @@
+<%ARGS>
+$Prefs => '/User/Prefs.html'
+</%ARGS>
+<%INIT>
+use URI::Escape;
+
+my $return_url = $RT::WebPath
+                    . '/index.html?goto='
+                    . URI::Escape::uri_escape(
+                        URI::Escape::uri_escape(
+                            $m->request_comp->path
+                            . '?'
+                            . $m->comp('/Elements/QueryString', %{$r->args})
+                        )
+                      );
+</%INIT>
+  <div id="quick-personal">
+    <span class="hide"><a href="#skipnav"><&|/l&>Skip Menu</&></a> | </span>
+% if ($session{'CurrentUser'}->Name
+%       and $session{'CurrentUser'}->Name ne $RT::WebPublicUser)
+% {
+    <&|/l, "<span>".$session{'CurrentUser'}->Name."</span>" &>Logged in as [_1]</&>
+% }
+% elsif ($session{'CurrentUser'}->Name eq $RT::WebPublicUser) {
+    <&|/l&>You are currently an anonymous guest.</&>
+    |
+    <a href="<%$RT::WebPath%>/NoAuth/Logout.html?URL=<% $return_url %>"><&|/l&>Login</&></a>
+    |
+    <a href="<%$RT::WebPath%>/NoAuth/Logout.html"><&|/l&>Return to Main</&></a>
+% }
+% else {
+    <&|/l&>Not logged in.</&>
+% }
+% if (    $session{'CurrentUser'}->Id
+%    and $session{'CurrentUser'}->HasRight( Right => 'ModifySelf', Object => $RT::System )) {
+    | <a href="<%$RT::WebPath%><%$Prefs%>"><&|/l&>Preferences</&></a>
+% }
+% if ($session{'CurrentUser'}->Name ne $RT::WebPublicUser
+%       and $m->request_comp->path =~ m|^/Public/|)
+% {
+    | <a href="<%$RT::WebPath%>/"><&|/l&>Return to Main</&></a>
+% }
+  <& /Elements/Callback, %ARGS &>
+% unless (!$session{'CurrentUser'}->Name
+%         or ($RT::WebExternalAuth and !$RT::WebFallbackToInternalAuth)
+%         or $session{'CurrentUser'}->Name eq $RT::WebPublicUser) {
+    | <a  href="<%$RT::WebPath%>/NoAuth/Logout.html<%$URL ? "?URL=".$URL : ''%>"><&|/l&>Logout</&></a>
+% }
+  </div>
+
