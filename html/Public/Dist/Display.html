@@ -56,7 +56,10 @@
 
 <& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
 
-<& /Dist/Elements/ShowMaintainers, Queue => $QueueObj &>
+<& /Dist/Elements/ShowMaintainers,
+    Queue => $QueueObj,
+    URL => 'Public/Dist/ByMaintainer.html?Name=',
+&>
 
 <& /Dist/Elements/ShowBugs,
     %ARGS,
