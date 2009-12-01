@@ -58,7 +58,10 @@
 <a name="skipnav" id="skipnav" accesskey="8"></a>
 <%INIT>
 my $basetopactions = {
-    A => { html => $m->scomp('/Public/Elements/CreateTicket') },
+    A => { html => $m->scomp(
+        '/Elements/CreateTicket',
+        SendTo => '/Public/Bug/Report.html'
+    ) },
     B => { html => $m->scomp(
         '/Elements/SimpleSearch',
         SendTo => '/Public/Search/Simple.html',
