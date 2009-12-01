@@ -62,53 +62,55 @@ my $basetopactions = {
         B => { html => $m->scomp('/Public/Elements/SimpleSearch') },
     };
 
-$basetopactions->{'0'} = { html => $m->scomp('/Elements/ContactInfo') }
-    if $m->comp_exists('/Elements/ContactInfo');
+$basetopactions->{'0'} = {
+    html => $m->scomp('/Elements/ContactInfo')
+} if $m->comp_exists('/Elements/ContactInfo');
 
-my $basetabs = {    A => { title => loc('Search Distributions'),
-                           path => 'Public/',
-                         },
-#                    B => { title => loc('Report Bug'),
-#                           path => 'Public/Bug/Report.html',
-#                         },
-                    C => { title => loc('Browse Distributions'),
-                        path => 'Public/Browse.html'
-                      },
-                 };
+my $basetabs = {
+    A => {
+        title => loc('Search Distributions'),
+        path  => 'Public/',
+    },
+#   B => {
+#       title => loc('Report Bug'),
+#       path  => 'Public/Bug/Report.html',
+#   },
+    C => {
+        title => loc('Browse Distributions'),
+        path  => 'Public/Browse.html'
+    },
+};
 
-if (!defined $toptabs) {
-   $toptabs = $basetabs;
-}
-if (!defined $topactions) {
-   $topactions = $basetopactions;
-}
+$toptabs ||= $basetabs;
+$topactions ||= $basetopactions;
 
 if ($queue) {
     my $escaped = $m->interp->apply_escapes($queue, 'u');
     $actions = {
         A => {
-            title   => loc("Active bugs"),
-            path    => "Public/Dist/Display.html?Status=Active&Name=". $escaped,
+            title => loc("Active bugs"),
+            path  => "Public/Dist/Display.html?Status=Active&Name=". $escaped,
         },
         Ab => {
-            title   => loc("Resolved bugs"),
-            path    => "Public/Dist/Display.html?Status=Resolved&Name=". $escaped,
+            title => loc("Resolved bugs"),
+            path  => "Public/Dist/Display.html?Status=Resolved&Name=". $escaped,
         },
         Ac => {
-            title   => loc("Rejected bugs"),
-            path    => "Public/Dist/Display.html?Status=Rejected&Name=". $escaped,
+            title => loc("Rejected bugs"),
+            path  => "Public/Dist/Display.html?Status=Rejected&Name=". $escaped,
         },
         B => {
-            title   => loc("Report a new bug"),
-            path    => 'Public/Bug/Report.html?Queue='. $escaped,
+            title => loc("Report a new bug"),
+            path  => 'Public/Bug/Report.html?Queue='. $escaped,
         },
     };
 }
 
-  # Now let callbacks add their extra tabs
-  $m->comp('/Elements/Callback', 
+$m->callback(
     topactions => $topactions, 
-    toptabs => $toptabs, %ARGS);
+    toptabs    => $toptabs,
+    %ARGS
+);
 
 </%INIT>
 <%ARGS>
