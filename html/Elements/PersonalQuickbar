@@ -21,13 +21,13 @@
 $Prefs => '/Prefs/Other.html'
 </%ARGS>
 <%INIT>
-my $logged_in = $session{'CurrentUser'}->Name;
+my $logged_in = $session{'CurrentUser'} && $session{'CurrentUser'}->Name;
 my ($can_modify_self, $public_user, $return_url) = (0, 0, '');
 if ( $logged_in ) {
     $can_modify_self = $session{'CurrentUser'}->HasRight(
         Right => 'ModifySelf', Object => $RT::System,
     ) if $Prefs;
-    $public_user = $logged_in eq $RT::WebPublicUser;
+    $public_user = $logged_in eq RT->Config->Get('WebPublicUser');
 }
 
 if ( $public_user ) {
