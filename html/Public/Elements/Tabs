@@ -77,13 +77,9 @@ my $basetabs = {
         title => loc('Search Distributions'),
         path  => 'Public/',
     },
-#   B => {
-#       title => loc('Report Bug'),
-#       path  => 'Public/Bug/Report.html',
-#   },
     C => {
         title => loc('Browse Distributions'),
-        path  => 'Public/Browse.html'
+        path  => 'Public/Dist/BeginsWith.html',
     },
 };
 

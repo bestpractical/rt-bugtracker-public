@@ -45,19 +45,14 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Browse Distributions") &>
-<& /Public/Elements/Tabs,
-    current_toptab => "Public/Browse.html",
-    Title => loc("Browse Distributions"),
-    &>
-
-<p>
-Find distributions that start with...
-</p>
-
-<p>
-% for my $letter ("A".."Z") {
-<a href="<% $RT::WebPath %>/Public/Dist/BeginsWith.html?Name=<% $letter %>"><% $letter %></a>
-% }
-</p>
-
+<%ARGS>
+$Name => undef
+</%ARGS>
+<%INIT>
+$Name = '' unless defined $Name;
+RT::Interface::Web::Redirect(
+    RT->Config->Get('WebURL')
+    .'Public/Dist/BeginsWith.html'
+    .'?Name='. $m->interp->apply_escapes( $Name, 'u' )
+);
+</%INIT>

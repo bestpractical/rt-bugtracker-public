@@ -45,18 +45,40 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Distributions starting with [_1]", $Name) &>
+<& /Elements/Header, Title => $title &>
 <& /Public/Elements/Tabs,
-    Title => loc("Distributions starting with [_1]", $Name),
-    &>
+    Title => $title,
+    current_toptab => 'Public/Dist/BeginsWith.html',
+&>
 
+<form action="<% RT->Config->Get('WebPath') %><% $m->request_path %>" method="GET">
+<p>
+<% loc('First letter is') %>
+% for my $letter ("A".."Z") {
+<a href="<% $RT::WebPath %>/Public/Dist/BeginsWith.html?Name=<% $letter %>">
+<% $letter eq $Name ? "<strong>$letter</strong>" : $letter |n %>
+</a>
+% }
+ <% loc('or prefix is') %> <input type="text" name="Name" value="<% length($Name) > 1? $Name : '' %>" />
+</p>
+</form>
+
+% if ( length $Name ) {
 <& /Public/Elements/DistributionList, queues => $queues &>
+% }
 
-<%init>
-my $queues = RT::Queues->new($session{CurrentUser});
-
-$queues->Limit(FIELD => 'Name', VALUE => $Name, OPERATOR => 'STARTSWITH');
-</%init>
 <%args>
 $Name => undef
 </%args>
+<%init>
+$Name = '' unless defined $Name;
+
+my ($title, $queues);
+if ( length $Name ) {
+    $title = loc("Distributions starting with '[_1]'", $Name);
+    $queues = RT::Queues->new( $session{CurrentUser} );
+    $queues->Limit(FIELD => 'Name', VALUE => $Name, OPERATOR => 'STARTSWITH');
+} else {
+    $title = loc("Browse Distributions");
+}
+</%init>
