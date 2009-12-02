@@ -79,7 +79,7 @@ my $basetabs = {
     },
     C => {
         title => loc('Browse Distributions'),
-        path  => 'Public/Dist/BeginsWith.html',
+        path  => 'Public/Dist/Browse.html',
     },
 };
 

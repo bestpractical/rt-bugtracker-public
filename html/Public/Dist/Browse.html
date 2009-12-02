@@ -45,14 +45,25 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<%ARGS>
+<& /Elements/Header, Title => $title &>
+<& /Public/Elements/Tabs,
+    Title => $title,
+    current_toptab => 'Public/Dist/Browse.html',
+&>
+
+<& /Dist/Elements/BeginsWith, Name => $Name &>
+
+% if ( $queues ) {
+<& /Public/Elements/DistributionList, queues => $queues &>
+% }
+
+<%args>
 $Name => undef
-</%ARGS>
-<%INIT>
-$Name = '' unless defined $Name;
-RT::Interface::Web::Redirect(
-    RT->Config->Get('WebURL')
-    .'Public/Dist/Browse.html'
-    .'?Name='. $m->interp->apply_escapes( $Name, 'u' )
+</%args>
+<%init>
+
+my ($queues, $title) = $m->comp(
+    '/Dist/Elements/BeginsWith:Process',
+    Name => $Name,
 );
-</%INIT>
+</%init>
