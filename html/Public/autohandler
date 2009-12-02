@@ -1,9 +1,5 @@
 <%INIT>
-return $m->call_next if
-       !$session{'CurrentUser'} || !$session{'CurrentUser'}->id
-    || $session{'CurrentUser'}->Name eq ($RT::WebPublicUser||'')
-    || defined $session{'BitcardUser'}
-    || defined $session{'CurrentUser'}->{'OpenID'};
+return $m->call_next if RT::BugTracker::Public->IsPublicUser;
 
 $RT::Logger->debug("Not a public user, not BitCard, not Openid. Going to redirect to main URL");
 # This is not a public user
