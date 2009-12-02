@@ -51,18 +51,20 @@
     Title => loc("Public Bug Tracker")
 &>
 
+<& /Elements/ListActions, actions => \@results &>
+
 <p>
-  <form action="/Public/Dist/Display.html" method="get">
+  <form action="<% RT->Config->Get('WebPath') %><% $m->request_path %>" method="get">
     <label for="form-dist-name"><&|/l&>Find a distribution by name:</&></label>
-    <input type="text" name="Name" id="form-dist-name" />
+    <input type="text" name="Distribution" id="form-dist-name" />
     <input type="submit" class="button" value="<&|/l&>Search</&>" />
   </form>
 </p>
 
 <p>
-  <form action="/Public/Dist/ByMaintainer.html" method="get">
+  <form action="<% RT->Config->Get('WebPath') %><% $m->request_path %>" method="get">
     <label for="form-dist-maint"><&|/l&>Find distributions by maintainer:</&></label>
-    <input type="text" name="Name" id="form-dist-maint" />
+    <input type="text" name="Maintainer" id="form-dist-maint" />
     <input type="submit" class="button" value="<&|/l&>Search</&>" />
   </form>
 </p>
@@ -76,5 +78,45 @@
 
   <&|/l&>This search looks for bug report IDs, distribution names, usernames, and bug report descriptions among other fields.</&>
 </p>
+<%ARGS>
+$Distribution => ''
+$Maintainer   => ''
+</%ARGS>
+<%INIT>
+my $title = loc("Public Bug Tracker");
 
+my @results;
 
+if ( defined $Maintainer && length $Maintainer ) {
+    my $user = RT::User->new( $session{'CurrentUser'} );
+    $user->Load( $Maintainer );
+    unless ( $user->id ) {
+        push @results, loc("No maintainer '[_1]' in the system", $Maintainer);
+    } else {
+        my $queues = $user->WatchedQueues('AdminCc', 'Cc');
+        if ( $queues->First ) {
+            RT::Interface::Web::Redirect(
+                RT->Config->Get('WebURL')
+                .'Public/Dist/ByMaintainer.html'
+                .'?Name='. $m->interp->apply_escapes( $user->Name, 'u' )
+            );
+        } else {
+            push @results, loc("User doesn't maintain any distributions");
+        }
+    }
+}
+
+if ( defined $Distribution && length $Distribution ) {
+    my $queue = RT::Queue->new( $session{'CurrentUser'} );
+    $queue->Load( $Distribution );
+    unless ( $queue->id ) {
+        push @results, loc("No distribution '[_1]' in the system", $Distribution);
+    } else {
+        RT::Interface::Web::Redirect(
+            RT->Config->Get('WebURL')
+            .'Public/Dist/Display.html'
+            .'?Name='. $m->interp->apply_escapes( $queue->Name, 'u' )
+        );
+    }
+}
+</%INIT>
