@@ -45,10 +45,11 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Distributions maintained by [_1]", $Name) &>
+<& /Elements/Header, Title => $title &>
 <& /Public/Elements/Tabs,
-    Title => loc("Distributions maintained by [_1]", $Name),
-    &>
+    Title => $title,
+    current_toptab => 'Public/',
+&>
 
 <& /Public/Elements/DistributionList, queues => $watched_queues &>
 
@@ -57,7 +58,7 @@ my $user = RT::User->new($session{CurrentUser});
 
 for my $method (qw(Load LoadByEmail)) {
     last if $user->Id;
-    
+
     if ($method eq 'LoadByEmail' and $Name !~ /\@/) {
         $user->$method("$Name\@cpan.org");
     }
@@ -70,6 +71,8 @@ if (not $user->Id) {
     $m->comp('/Public/Elements/ErrorNoUser', Name => $Name, %ARGS);
     $m->abort();
 }
+
+my $title = loc("Distributions maintained by [_1]", $Name);
 
 my $watched_queues = $user->WatchedQueues('AdminCc');
 
