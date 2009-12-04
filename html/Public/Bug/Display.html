@@ -62,7 +62,7 @@
 
 <& /Elements/Callback, _CallbackName => 'BeforeShowHistory', Ticket => $TicketObj, %ARGS &>
 
-<& /Public/Bug/Elements/ShowHistory , 
+<& /Ticket/Elements/ShowHistory , 
       Ticket => $TicketObj, 
       Tickets => $Tickets, 
       Collapsed => $ARGS{'Collapsed'}, 
@@ -70,8 +70,7 @@
       Attachments => $attachments,
       AttachmentContent => $attachment_content,
       UpdatePath => "$RT::WebPath/Public/Bug/Update.html"
-      
-      &> 
+&> 
 
 <%ARGS>
 $id => undef
