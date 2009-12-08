@@ -159,9 +159,6 @@ if (@Actions) {
     $m->redirect( $RT::WebPath ."/Ticket/Display.html?id=".$TicketObj->id);
     $m->abort();
     $RT::Logger->error("Aborted. Should never be called");
-} else {
-    @Actions = @{$session{"Actions"} || [] };
-    delete $session{"Actions"};
 }
 
 $m->comp('/Elements/Callback', _CallbackName => 'BeforeDisplay',
