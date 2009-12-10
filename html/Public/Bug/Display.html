@@ -46,11 +46,11 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, 
-    Title => loc("#[_1]: [_2]", $TicketObj->Id, $TicketObj->Subject) &>
+    Title => $title &>
 <& /Public/Elements/Tabs, 
-    Title => loc("#[_1]: [_2]", $TicketObj->Id, $TicketObj->Subject),
-    queue => $TicketObj->QueueObj->Name,
-    &>
+    Title => $title,
+    ticket => $TicketObj,
+&>
 
 <& /Elements/ListActions, actions => \@Actions &>
 
@@ -167,6 +167,11 @@ $m->comp('/Elements/Callback', _CallbackName => 'BeforeDisplay',
 
 my $attachments = $m->comp('/Ticket/Elements/FindAttachments', Ticket => $TicketObj, Tickets => $Tickets);
 my $attachment_content = $m->comp('/Ticket/Elements/LoadTextAttachments', Ticket => $TicketObj);
+
+my $title = loc(
+    "Bug #[_1] for [_2]: [_3]",
+    $TicketObj->Id, $TicketObj->QueueObj->Name, $TicketObj->Subject
+);
 
 sub _UpdateMessage {
     # Modified version of RT::Interface::Web::ProcessUpdateMessage()
