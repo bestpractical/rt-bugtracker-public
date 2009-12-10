@@ -50,8 +50,7 @@
 <& /Public/Elements/Tabs,
     Title => $title,
     queue => $Name,
-    current_tab => '/Public/Browse.html',
-    current_subtab => $current_subtab,
+    current_tab => $current_tab,
 &>
 
 <& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
@@ -82,11 +81,11 @@ $ARGS{'Name'} = $Name = $QueueObj->Name;
 
 my $title = loc( "$Status bugs for [_1]", $Name );
 
-my $current_subtab = "Public/Dist/Display.html"
+my $current_tab = "Public/Dist/Display.html"
     ."?Status=". $m->interp->apply_escapes($Status, 'u')
     ."&Name=". $m->interp->apply_escapes($QueueObj->Name, 'u');
 
-my ($base_url) = ($current_subtab =~ m|^Public/Dist/(.+)$|);
+my ($base_url) = ($current_tab =~ m|^Public/Dist/(.+)$|);
 $base_url .= '&';
 
 </%INIT>

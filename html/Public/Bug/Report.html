@@ -47,10 +47,10 @@
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => loc("Report a bug in [_1]", $Queue) &>
 <& /Public/Elements/Tabs,
-        Title => loc("Report a bug in [_1]", $Queue),
-        current_tab => 'Public/Bug/Report.html',
-        actions => $actions,
-        &>
+    Title => loc("Report a bug in [_1]", $Queue),
+    queue => $Queue,
+    current_tab => $current_tab,
+&>
 
 <p>
 Thanks for taking the time to report a bug in <em><% $Queue %></em>.  You
@@ -262,13 +262,8 @@ if ((!exists $ARGS{'AddMoreAttach'}) and ($ARGS{'id'} eq 'new') and $ValidCFs) {
     $m->abort();
 }
 
-my $actions = {
-    A => {
-        title   => loc("Bug list"),
-        path    => 'Public/Dist/Display.html?Name='
-                    . $m->interp->apply_escapes($Queue, 'u'),
-    },
-};
+my $current_tab = "Public/Bug/Report.html"
+    ."?Queue=". $m->interp->apply_escapes($QueueObj->Name, 'u');
 
 </%INIT>
 

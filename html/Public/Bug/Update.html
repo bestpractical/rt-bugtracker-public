@@ -47,8 +47,9 @@
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => $title &>
 <& /Public/Elements/Tabs,
-    Ticket => $TicketObj,
-    Title => $title &>
+    Title => $title,
+    ticket => $TicketObj,
+&>
 
 <form action="<% $RT::WebPath %>/Public/Bug/Update.html" name="TicketUpdate" 
 	method="post" enctype="multipart/form-data">
