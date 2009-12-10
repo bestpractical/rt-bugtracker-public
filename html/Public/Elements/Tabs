@@ -46,13 +46,16 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Public/Elements/PageLayout,
-    current_toptab => $current_toptab,
-    current_tab => $current_tab,
     toptabs => $toptabs,
-    topactions => $topactions,
+    current_toptab => $current_toptab,
+
     tabs => $tabs,
+    current_tab => $current_tab,
+
+    topactions => $topactions,
     actions => $actions,
     subactions => $subactions,
+
     title => $Title
 &>
 <a name="skipnav" id="skipnav" accesskey="8"></a>
@@ -83,12 +86,14 @@ my $basetabs = {
     },
 };
 
-$toptabs ||= $basetabs;
+$toptabs    ||= $basetabs;
 $topactions ||= $basetopactions;
 
-if ($queue) {
+$queue ||= $ticket->QueueObj->Name if $ticket;
+if ( $queue ) {
     my $escaped = $m->interp->apply_escapes($queue, 'u');
-    $actions = {
+    $current_toptab = 'Public/Dist/Browse.html';
+    $tabs = {
         A => {
             title => loc("Active bugs"),
             path  => "Public/Dist/Display.html?Status=Active&Name=". $escaped,
@@ -106,6 +111,17 @@ if ($queue) {
             path  => 'Public/Bug/Report.html?Queue='. $escaped,
         },
     };
+    if ( $ticket && !$current_tab ) {
+        my $status = $ticket->Status;
+        if ( $ticket->QueueObj->IsActiveStatus( $status ) ) {
+            $current_tab = "Public/Dist/Display.html?Status=Active&Name=". $escaped;
+        } elsif ( $status eq 'rejected' || $status eq 'deleted' ) {
+            $current_tab = "Public/Dist/Display.html?Status=Rejected&Name=". $escaped;
+        } else {
+            $current_tab = "Public/Dist/Display.html?Status=Resolved&Name=". $escaped;
+            
+        }
+    }
 }
 
 $m->callback(
@@ -116,13 +132,17 @@ $m->callback(
 
 </%INIT>
 <%ARGS>
-$current_toptab => undef
-$current_tab => undef
 $toptabs => undef
-$topactions => undef
+$current_toptab => undef
+
 $tabs => undef
+$current_tab => undef
+
+$topactions => undef
 $actions => undef
 $subactions => undef
+
 $Title => undef
+$ticket => undef
 $queue => undef
 </%ARGS>
