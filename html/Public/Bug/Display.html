@@ -83,7 +83,7 @@ $TicketObj => undef
 <%INIT>
 $m->comp('/Elements/Callback', _CallbackName => 'Initial', TicketObj => $TicketObj, ARGSRef => \%ARGS);
 
-my ($linkid, $message, $tid, @Actions, $Tickets);
+my (@Actions, $Tickets);
 
 unless ($id || $TicketObj) {
     Abort('No ticket specified');
