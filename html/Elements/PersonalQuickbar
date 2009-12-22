@@ -35,7 +35,8 @@ if ( $public_user ) {
         RT->Config->Get('WebPath')
         . '/index.html?goto='
         . URI::Escape::uri_escape( URI::Escape::uri_escape(
-            $m->request_path
+            RT->Config->Get('WebPath')
+            . $m->request_path
             . '?'
             . $m->comp('/Elements/QueryString', %{$r->args})
         ) );
