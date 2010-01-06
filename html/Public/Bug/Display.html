@@ -69,7 +69,8 @@
       ShowHeaders => $ARGS{'ShowHeaders'},
       Attachments => $attachments,
       AttachmentContent => $attachment_content,
-      UpdatePath => "$RT::WebPath/Public/Bug/Update.html"
+      DisplayPath => RT->Config->Get('WebPath') . '/Public/Bug/Display.html?id='. $TicketObj->id,
+      UpdatePath  => RT->Config->Get('WebPath') . '/Public/Bug/Update.html',
 &> 
 
 <%ARGS>
