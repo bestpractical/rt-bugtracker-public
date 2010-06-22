@@ -108,6 +108,7 @@ if ( defined $Maintainer && length $Maintainer ) {
 
 if ( defined $Distribution && length $Distribution ) {
     my $queue = RT::Queue->new( $session{'CurrentUser'} );
+    $Distribution =~ s/::/-/g;
     $queue->Load( $Distribution );
     unless ( $queue->id ) {
         push @results, loc("No distribution '[_1]' in the system", $Distribution);
