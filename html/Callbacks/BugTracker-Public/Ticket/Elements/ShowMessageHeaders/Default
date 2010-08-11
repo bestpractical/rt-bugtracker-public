@@ -1,0 +1,10 @@
+<%args>
+$headers
+</%args>
+<%init>
+# Protect email addresses
+for my $h (@$headers) {
+    next unless $h->{'Tag'} =~ /^(?:From|To|Cc|Bcc|Reply-To)$/i;
+    $h->{'Value'} =~ s/@/ [...] /g;
+}
+</%init>
