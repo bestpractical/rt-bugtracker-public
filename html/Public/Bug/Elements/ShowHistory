@@ -1,8 +1,8 @@
 %# BEGIN BPS TAGGED BLOCK {{{
 %# 
 %# COPYRIGHT:
-%#  
-%# This software is Copyright (c) 1996-2007 Best Practical Solutions, LLC 
+%# 
+%# This software is Copyright (c) 1996-2010 Best Practical Solutions, LLC
 %#                                          <jesse@bestpractical.com>
 %# 
 %# (Except where explicitly superseded by other copyright notices)
@@ -24,7 +24,7 @@
 %# along with this program; if not, write to the Free Software
 %# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 %# 02110-1301 or visit their web page on the internet at
-%# http://www.gnu.org/copyleft/gpl.html.
+%# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
 %# 
 %# 
 %# CONTRIBUTION SUBMISSION POLICY:
@@ -58,7 +58,7 @@ if ($ShowDisplayModes or $ShowTitle) {
     my $titleright;
 
     if ($ShowDisplayModes) {
-        $titleright = q[<span style="color: black">] . loc('Display mode') . ':</span> ';
+        $titleright = '';
         
         if ($ShowHeaders) {
             $titleright .= qq{<a href="$URIFile?id=} .
@@ -76,7 +76,8 @@ if ($ShowDisplayModes or $ShowTitle) {
         }
     }
 </%perl>
-<& /Widgets/TitleBoxStart, title => $title, titleright => $titleright &>
+<div class="history">
+<& /Widgets/TitleBoxStart, title => $title, titleright_raw => $titleright &>
 % }
 
 <div id="ticket-history">
@@ -86,12 +87,14 @@ my @attachment_content = @{$AttachmentContent->ItemsArrayRef()};
 
 while ( my $Transaction = $Transactions->Next ) {
     my $skip = 0;
-    $m->comp( '/Elements/Callback',
-              _CallbackName => 'SkipTransaction',
-              Transaction   => $Transaction,
-              skip          => \$skip,
-              %ARGS );
+    $m->callback(
+        %ARGS,
+        Transaction   => $Transaction,
+        skip          => \$skip,
+        CallbackName  => 'SkipTransaction',
+    );
     next if $skip;
+
     $i++;
 
     my @trans_attachments = grep { $_->TransactionId == $Transaction->Id } @attachments;
@@ -100,21 +103,24 @@ while ( my $Transaction = $Transactions->Next ) {
     grep { ($_->TransactionId == $Transaction->Id ) && ($trans_content->{$_->Id} = $_)  } @attachment_content;
 
    
+    my $IsLastTransaction = 0;
+    if ( $OldestFirst ) {
+        $IsLastTransaction = $Transactions->IsLast;
+    } else {
+        $IsLastTransaction = 1 if ( $i == 1 );
+    }
+
     #Args is first because we're clobbering the "Attachments" parameter 
     $m->comp( 'ShowTransaction',
             %ARGS,
 
-              AttachPath           => $AttachPath,
-              UpdatePath           => $UpdatePath,
               Ticket               => $Ticket,
               Transaction          => $Transaction,
               ShowHeaders          => $ShowHeaders,
-              Collapsed            => $Collapsed,
               RowNum               => $i,
-              ShowTitleBarCommands => $ShowTitleBarCommands,
               Attachments          => \@trans_attachments,
               AttachmentContent    => $trans_content,
-              LastTransaction      => $Transactions->IsLast
+              LastTransaction      => $IsLastTransaction
  );
 
 # manually flush the content buffer after each txn, so the user sees
@@ -126,6 +132,7 @@ $m->flush_buffer();
 </div>
 % if ($ShowDisplayModes or $ShowTitle) {
 <& /Widgets/TitleBoxEnd &>
+</div>
 % }
 <%INIT>
 my $Transactions = new RT::Transactions($session{'CurrentUser'});
@@ -138,11 +145,12 @@ if ($Tickets) {
 }
 
 
-my $OldestFirst = $RT::OldestTransactionsFirst? 'ASC': 'DESC';
+my $OldestFirst = RT->Config->Get( 'OldestTransactionsFirst', $session{'CurrentUser'} );
+my $SortOrder = $OldestFirst? 'ASC': 'DESC';
 $Transactions->OrderByCols( { FIELD => 'Created',
-                              ORDER => $OldestFirst },
+                              ORDER => $SortOrder },
                             { FIELD => 'id',
-                              ORDER => $OldestFirst },
+                              ORDER => $SortOrder },
                           );
 
 my $i;
@@ -151,16 +159,13 @@ $AttachmentContent ||= $m->comp('/Ticket/Elements/LoadTextAttachments', Ticket =
 
 </%INIT>
 <%ARGS>
-$URIFile => $RT::WebPath."/Ticket/Display.html"
+$URIFile => RT->Config->Get('WebPath')."/Ticket/Display.html"
 $Ticket => undef
 $Tickets => undef
 $Attachments => undef
 $AttachmentContent => undef
 $ShowHeaders => undef
-$Collapsed => undef
 $ShowTitle => 1
 $ShowDisplayModes => 1
-$ShowTitleBarCommands => 1
-$AttachPath => $RT::WebPath."/Ticket/Attachment"
-$UpdatePath => $RT::WebPath."/Ticket/Update.html"
+$WarnUnsigned => undef
 </%ARGS>
