@@ -5,7 +5,7 @@
     | <a href="<% RT->Config->Get('WebPath') %>/NoAuth/Logout.html?URL=<% $return_url %>"><&|/l&>Login</&></a>
     | <a href="<% RT->Config->Get('WebPath') %>/NoAuth/Logout.html"><&|/l&>Return to Main</&></a>
 % } elsif ( $logged_in ) {
-    <&|/l, "<span>".$session{'CurrentUser'}->Name."</span>" &>Logged in as [_1]</&>
+    <% loc("Logged in as [_1]", "<span>".$m->interp->apply_escapes($session{'CurrentUser'}->Name,'h')."</span>") |n %>
 % } else {
     <&|/l&>Not logged in.</&>
 % }
