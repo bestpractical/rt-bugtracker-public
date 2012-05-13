@@ -46,102 +46,146 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/PageLayout,
-    toptabs => $toptabs,
-    current_toptab => $current_toptab,
-
-    tabs => $tabs,
-    current_tab => $current_tab,
-
-    topactions => $topactions,
-    actions => $actions,
-    subactions => $subactions,
-
     title => $Title
 &>
 <a name="skipnav" id="skipnav" accesskey="8"></a>
 <%INIT>
-my $basetopactions = {
-    A => { html => $m->scomp(
-        '/Elements/CreateTicket',
-        SendTo => '/Public/Bug/Report.html'
-    ) },
-    B => { html => $m->scomp(
-        '/Elements/SimpleSearch',
-        SendTo => '/Public/Search/Simple.html',
-    ) },
+my $query_string = sub {
+    my %args = @_;
+    my $u    = URI->new();
+    $u->query_form(%args);
+    return $u->query;
 };
 
-$basetopactions->{'0'} = {
-    html => $m->scomp('/Elements/ContactInfo')
-} if $m->comp_exists('/Elements/ContactInfo');
 
-my $basetabs = {
-    A => {
-        title => loc('Search Distributions'),
-        path  => 'Public/',
-    },
-    C => {
-        title => loc('Browse Distributions'),
-        path  => 'Public/Dist/Browse.html',
-    },
-};
+PageWidgets()->child( simple_search => raw_html => $m->scomp(
+        '/Elements/SimpleSearch', SendTo => '/Public/Search/Simple.html'
+    )
+);
 
-$toptabs    ||= $basetabs;
-$topactions ||= $basetopactions;
+PageWidgets()->child( create_ticket => raw_html =>
+      $m->scomp( '/Elements/CreateTicket', SendTo => '/Public/Bug/Report.html' ) );
+
+PageWidgets()->child( contact_info => raw_html =>
+      $m->scomp( '/Elements/ContactInfo' ) ) if $m->comp_exists('/Elements/ContactInfo');
+
+Menu()->child(
+    search_dist => title => loc('Search Distributions'),
+    path        => '/Public/',
+);
+
+Menu()->child(
+    browse_dist => title => loc('Browse Distributions'),
+    path        => '/Public/Dist/Browse.html',
+);
+
+my $username =
+    '<span class="current-user">'
+  . $m->interp->apply_escapes( RT::BugTracker::Public->IsPublicUser ?
+          'anonymous guest' : $session{'CurrentUser'}->Name, 'h' )
+  . '</span>';
+
+my $about_me = Menu()->child(
+    'preferences' => title => loc( 'Logged in as [_1]', $username ),
+    escape_title  => 0,
+    sort_order    => 99,
+);
+
+if (   $session{'CurrentUser'}->UserObj
+    && $session{'CurrentUser'}
+    ->HasRight( Right => 'ModifySelf', Object => RT->System ) )
+{
+    my $settings = $about_me->child(
+        settings => title => loc('Settings'),
+        path     => '/Prefs/Other.html'
+    );
+    $settings->child(
+        options => title => loc('Options'),
+        path    => '/Prefs/Other.html'
+    );
+    $settings->child(
+        about_me => title => loc('About me'),
+        path     => '/User/Prefs.html'
+    );
+    $settings->child(
+        search_options => title => loc('Search options'),
+        path           => '/Prefs/SearchOptions.html'
+    );
+    $settings->child(
+        myrt => title => loc('RT at a glance'),
+        path => '/Prefs/MyRT.html'
+    );
+    $settings->child(
+        quicksearch => title => loc('Quick search'),
+        path        => '/Prefs/Quicksearch.html'
+    );
+
+    my $search_menu =
+      $settings->child( 'saved-searches' => title => loc('Saved Searches') );
+    my $searches = [
+        $m->comp(
+            "/Search/Elements/SearchesForObject",
+            Object => RT::System->new( $session{'CurrentUser'} )
+        )
+    ];
+    my $i = 0;
+
+    for my $search (@$searches) {
+        $search_menu->child(
+            "search-" . $i++ => title => $search->[0],
+            path             => "/Prefs/Search.html?"
+              . $query_string->(
+                name => ref( $search->[1] ) . '-' . $search->[1]->Id
+              ),
+        );
+    }
+}
+
+if (
+    $session{'CurrentUser'}->Name
+    && (  !RT->Config->Get('WebExternalAuth')
+        || RT->Config->Get('WebFallbackToInternalAuth') )
+  )
+{
+    $about_me->child(
+        logout => title => loc('Logout'),
+        path   => '/NoAuth/Logout.html'
+    );
+}
+
+Menu()->child(
+    browse_dist => title => loc('Browse Distributions'),
+    path        => '/Public/Dist/Browse.html',
+);
 
 $queue ||= $ticket->QueueObj->Name if $ticket;
 if ( $queue ) {
     my $escaped = $m->interp->apply_escapes($queue, 'u');
-    $current_toptab = 'Public/Dist/Browse.html';
-    $tabs = {
-        A => {
-            title => loc("Active bugs"),
-            path  => "Public/Dist/Display.html?Status=Active&Name=". $escaped,
-        },
-        Ab => {
+    PageMenu()->child(
+        active_bugs => title => loc("Active bugs"),
+        path => "/Public/Dist/Display.html?Status=Active&Name=" . $escaped,
+    );
+
+    PageMenu()->child( resolved_bugs =>
             title => loc("Resolved bugs"),
-            path  => "Public/Dist/Display.html?Status=Resolved&Name=". $escaped,
-        },
-        Ac => {
+            path  => "/Public/Dist/Display.html?Status=Resolved&Name=". $escaped,
+    );
+
+    PageMenu()->child( rejected_bugs => 
             title => loc("Rejected bugs"),
-            path  => "Public/Dist/Display.html?Status=Rejected&Name=". $escaped,
-        },
-        B => {
+            path  => "/Public/Dist/Display.html?Status=Rejected&Name=". $escaped,
+    );
+
+    PageMenu()->child( report => 
             title => loc("Report a new bug"),
-            path  => 'Public/Bug/Report.html?Queue='. $escaped,
-        },
-    };
-    if ( $ticket && !$current_tab ) {
-        my $status = $ticket->Status;
-        if ( $ticket->QueueObj->IsActiveStatus( $status ) ) {
-            $current_tab = "Public/Dist/Display.html?Status=Active&Name=". $escaped;
-        } elsif ( $status eq 'rejected' || $status eq 'deleted' ) {
-            $current_tab = "Public/Dist/Display.html?Status=Rejected&Name=". $escaped;
-        } else {
-            $current_tab = "Public/Dist/Display.html?Status=Resolved&Name=". $escaped;
-            
-        }
-    }
+            path  => '/Public/Bug/Report.html?Queue='. $escaped,
+    );
 }
 
-$m->callback(
-    topactions => $topactions, 
-    toptabs    => $toptabs,
-    %ARGS
-);
+$m->callback( %ARGS );
 
 </%INIT>
 <%ARGS>
-$toptabs => undef
-$current_toptab => undef
-
-$tabs => undef
-$current_tab => undef
-
-$topactions => undef
-$actions => undef
-$subactions => undef
-
 $Title => undef
 $ticket => undef
 $queue => undef
