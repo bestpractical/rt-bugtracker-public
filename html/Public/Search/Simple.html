@@ -67,7 +67,7 @@ RT will look for anything else you enter in ticket bodies and attachments.</&></
 </div>
 % }
 % else {
-<& /Public/Search/Elements/Results, Query => ($search ? $search->QueryToSQL() : undef), %ARGS &>
+<& /Public/Search/Elements/Results, Query => ($search ? $search->QueryToSQL() : undef), Format => RT->Config->Get('DefaultSearchResultFormat'), %ARGS &>
 % }
 
 <%INIT>
