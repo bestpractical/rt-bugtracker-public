@@ -51,7 +51,7 @@
     Title => $title
 &>
 
-% if (not $q) {
+% if (not $q and not $ARGS{Query}) {
 <div id="SimpleSearchForm">
 <form action="Simple.html" method="get">
 
@@ -67,7 +67,7 @@ RT will look for anything else you enter in ticket bodies and attachments.</&></
 </div>
 % }
 % else {
-<& /Public/Search/Elements/Results, Query => $search->QueryToSQL() &>
+<& /Public/Search/Elements/Results, Query => ($search ? $search->QueryToSQL() : undef), %ARGS &>
 % }
 
 <%INIT>
