@@ -7,18 +7,6 @@ CONFIGURATION
     of configuration and sane defaults. Add require in the main
     RT_SiteConfig.pm or define options there.
 
-  NoAuthRegexp
-    As public shouldn't require authentication then you should add
-    '/Public/' path to NoAuthRegexp option, something like:
-
-        Set($WebNoAuthRegex, qr!^(?:/+NoAuth/|
-                                    /+Public/|
-                                    /+REST/\d+\.\d+/NoAuth/)!x );
-
-    Note that if you have multiple extensions that want to change this
-    option then you have to merge them manually into one perl regular
-    expression.
-
   WebPublicUser
     Make sure to create the public user in your RT system and add the line
     below to your RT_SiteConfig.pm.
