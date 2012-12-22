@@ -79,7 +79,7 @@ my $search;
 if ($q) {
     my $tickets = new RT::Tickets( $session{'CurrentUser'} );
     
-    $m->comp('/Elements/Callback', %ARGS, _CallbackName => 'ModifyQuery', query => \$q);
+    $m->callback( %ARGS, CallbackName => 'ModifyQuery', query => \$q);
     
     # try to load a queue or a user; if found, redirect to the distribution page
     # instead of the search page

@@ -58,7 +58,7 @@
     BaseURL => $BaseURL,
     %ARGS
    &>
-<& /Elements/Callback, _CallbackName => 'SearchActions', QueryString => $QueryString&>
+% $m->callback(CallbackName => 'SearchActions', QueryString => $QueryString);
 <%INIT>
 # Read from user preferences
 my $prefs = $session{'CurrentUser'}->UserObj->Preferences("SearchDisplay") || {};
