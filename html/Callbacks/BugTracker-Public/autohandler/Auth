@@ -59,6 +59,7 @@ if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
         unless ( $cu->id ) {
             $RT::Logger->error("Couldn't load public user with name '$RT::WebPublicUser'");
         } else {
+            RT::Interface::Web::InstantiateNewSession();
             $session{'CurrentUser'} = $cu;
         }
     }
