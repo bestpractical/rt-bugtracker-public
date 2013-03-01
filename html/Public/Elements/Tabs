@@ -50,24 +50,17 @@
 &>
 <a name="skipnav" id="skipnav" accesskey="8"></a>
 <%INIT>
-my $query_string = sub {
-    my %args = @_;
-    my $u    = URI->new();
-    $u->query_form(%args);
-    return $u->query;
-};
-
+# Only show the Public nav to the public user
+unless (RT::BugTracker::Public->IsPublicUser) {
+    $m->comp("/Elements/Tabs");
+    return;
+}
 
 PageWidgets()->child( simple_search => raw_html => $m->scomp(
-        '/Elements/SimpleSearch', SendTo => '/Public/Search/Simple.html'
-    )
-);
+    '/Elements/SimpleSearch', SendTo => '/Public/Search/Simple.html' ));
 
-PageWidgets()->child( create_ticket => raw_html =>
-      $m->scomp( '/Elements/CreateTicket', SendTo => '/Public/Bug/Report.html' ) );
-
-PageWidgets()->child( contact_info => raw_html =>
-      $m->scomp( '/Elements/ContactInfo' ) ) if $m->comp_exists('/Elements/ContactInfo');
+PageWidgets()->child( create_ticket => raw_html => $m->scomp(
+    '/Elements/CreateTicket', SendTo => '/Public/Bug/Report.html' ));
 
 Menu()->child(
     search_dist => title => loc('Search Distributions'),
@@ -79,79 +72,19 @@ Menu()->child(
     path        => '/Public/Dist/Browse.html',
 );
 
-my $username =
-    '<span class="current-user">'
-  . $m->interp->apply_escapes( RT::BugTracker::Public->IsPublicUser ?
-          'anonymous guest' : $session{'CurrentUser'}->Name, 'h' )
-  . '</span>';
-
-my $about_me = Menu()->child(
-    'preferences' => title => loc( 'Logged in as [_1]', $username ),
+Menu->child(
+    'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
     escape_title  => 0,
     sort_order    => 99,
 );
 
-if (   $session{'CurrentUser'}->UserObj
-    && $session{'CurrentUser'}
-    ->HasRight( Right => 'ModifySelf', Object => RT->System ) )
-{
-    my $settings = $about_me->child(
-        settings => title => loc('Settings'),
-        path     => '/Prefs/Other.html'
-    );
-    $settings->child(
-        options => title => loc('Options'),
-        path    => '/Prefs/Other.html'
-    );
-    $settings->child(
-        about_me => title => loc('About me'),
-        path     => '/User/Prefs.html'
-    );
-    $settings->child(
-        search_options => title => loc('Search options'),
-        path           => '/Prefs/SearchOptions.html'
-    );
-    $settings->child(
-        myrt => title => loc('RT at a glance'),
-        path => '/Prefs/MyRT.html'
-    );
-    $settings->child(
-        quicksearch => title => loc('Quick search'),
-        path        => '/Prefs/Quicksearch.html'
-    );
-
-    my $search_menu =
-      $settings->child( 'saved-searches' => title => loc('Saved Searches') );
-    my $searches = [
-        $m->comp(
-            "/Search/Elements/SearchesForObject",
-            Object => RT::System->new( $session{'CurrentUser'} )
-        )
-    ];
-    my $i = 0;
-
-    for my $search (@$searches) {
-        $search_menu->child(
-            "search-" . $i++ => title => $search->[0],
-            path             => "/Prefs/Search.html?"
-              . $query_string->(
-                name => ref( $search->[1] ) . '-' . $search->[1]->Id
-              ),
-        );
-    }
-}
-
-if (
-    $session{'CurrentUser'}->Name
-    && (  !RT->Config->Get('WebExternalAuth')
-        || RT->Config->Get('WebFallbackToInternalAuth') )
-  )
-{
-    $about_me->child(
-        logout => title => loc('Logout'),
-        path   => '/NoAuth/Logout.html'
-    );
-}
+# Public user must logout to login
+Menu->child(
+    "login",
+    title       => loc('Login as another user'),
+    path        => '/NoAuth/Logout.html',
+    sort_order  => 100,
+);
 
 Menu()->child(
     browse_dist => title => loc('Browse Distributions'),
