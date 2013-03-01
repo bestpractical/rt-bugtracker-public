@@ -49,7 +49,7 @@
 # If there's no user and this is not a login request and we're looking
 # at a public UI request, log in automatically as the public user so the
 # person can get the rights of the system group "Everyone"
-if (    not $session{'CurrentUser'}
+if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
     and not defined $ARGS{user}
     and not defined $ARGS{pass} )
 {
