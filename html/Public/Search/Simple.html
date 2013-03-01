@@ -46,10 +46,7 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => $title &>
-<& /Public/Elements/Tabs, 
-    current_toptab => "Public/Search/Simple.html",
-    Title => $title
-&>
+<& /Elements/Tabs &>
 
 % if (not $q and not $ARGS{Query}) {
 <div id="SimpleSearchForm">

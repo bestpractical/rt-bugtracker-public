@@ -46,11 +46,7 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => loc("Report a bug in [_1]", $Queue) &>
-<& /Public/Elements/Tabs,
-    Title => loc("Report a bug in [_1]", $Queue),
-    queue => $Queue,
-    current_tab => $current_tab,
-&>
+<& /Elements/Tabs &>
 
 <p>
 Thanks for taking the time to report a bug in <em><% $Queue %></em>.  You

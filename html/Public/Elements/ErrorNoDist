@@ -45,11 +45,8 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Error") &>
-<& /Public/Elements/Tabs,
-        Title       => loc("Unable to find distribution"),
-        current_tab => '',
-        &>
+<& /Elements/Header, Title => loc("Unable to find distribution") &>
+<& /Elements/Tabs &>
 
 <p>
 % if ($Queue) {
