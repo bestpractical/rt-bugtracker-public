@@ -68,10 +68,10 @@ elsif ( $path =~ '^(/+)Dist/Display.html' and $ARGS{'Queue'} ) {
 }
 
 # otherwise, drop the user at the Public default page
-# XXX: don't we want to check against 'NoAuthRegexp' instead???
 elsif (    $path !~ '^(/+)Public/'
-       and $path !~ '^(/+)NoAuth/'
-       and $path !~ '^(/+)Ticket/Attachment/') {
+       and $path !~ RT->Config->Get('WebNoAuthRegex')
+       and $path !~ '^(/+)Ticket/Attachment/'
+       and $path !~ '^/+Helpers/Autocomplete/Queues' ) {
     $m->redirect($RT::WebPath . "/Public/");
     $m->abort();
 }
