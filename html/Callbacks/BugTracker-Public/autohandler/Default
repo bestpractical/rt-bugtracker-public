@@ -59,12 +59,14 @@ if ( $path =~ '^(/+)Ticket/Display.html'
 {
     $m->redirect($RT::WebPath . "/Public/Bug/Display.html?id="
                     . $m->interp->apply_escapes($ARGS{'id'}, 'u'));
-    $m->abort();
 }
-
-elsif ( $path =~ '^(/+)Dist/Display.html' and $ARGS{'Queue'} ) {
+elsif ( $path =~ '^(/+)Dist/Display.html' and ($ARGS{'Name'} or $ARGS{'Queue'}) ) {
     $m->redirect($RT::WebPath . "/Public/Dist/Display.html?Name="
-                    . $m->interp->apply_escapes($ARGS{'Queue'}, 'u'));
+                    . $m->interp->apply_escapes($ARGS{'Name'} || $ARGS{'Queue'}, 'u'));
+}
+elsif ( $path =~ '^(/+)Dist/ByMaintainer.html' and $ARGS{'Name'} ) {
+    $m->redirect($RT::WebPath . "/Public/Dist/ByMaintainer.html?Name="
+                    . $m->interp->apply_escapes($ARGS{'Name'}, 'u'));
 }
 
 # otherwise, drop the user at the Public default page
