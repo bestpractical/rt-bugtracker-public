@@ -58,6 +58,11 @@ if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
         Path => $path,
         ARGS => \%ARGS,
     );
+
+    # We only care if the public equivalent is a page and not the top-level.
+    undef $has_public_equiv
+        if $has_public_equiv eq "/Public/";
+
     if ( $path =~ m{ ^/+Public/ }x or $has_public_equiv ) {
         my $cu = new RT::CurrentUser;
         $cu->LoadByName( $RT::WebPublicUser );
