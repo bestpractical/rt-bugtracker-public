@@ -6,6 +6,9 @@ return unless RT::BugTracker::Public->IsPublicUser;
 # example)
 my $about = Menu->child("about");
 
+# Save the Preferences menu ("Logged in as..") for Bitcard/OpenID users
+my $preferences = Menu->child("preferences");
+
 # Clear the decks
 RT::Interface::Web::InitializeMenu();
 
@@ -27,19 +30,25 @@ Menu()->child(
 
 Menu->child( "about", menu => $about );
 
-Menu->child(
-    'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
-    escape_title  => 0,
-    sort_order    => 100,
-);
+if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
+    Menu->child(
+        'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
+        escape_title  => 0,
+        sort_order    => 100,
+    );
 
-# Public user must logout to login
-Menu->child(
-    "login",
-    title       => loc('Login as another user'),
-    path        => '/NoAuth/Logout.html',
-    sort_order  => 101,
-);
+    # Public user must logout to login
+    Menu->child(
+        "login",
+        title       => loc('Login as another user'),
+        path        => '/NoAuth/Logout.html',
+        sort_order  => 101,
+    );
+} else {
+    # Preserve core RT generated "Logged in as" menu for other authenticated
+    # users from Bitcard and OpenID which also get the Public view
+    Menu->child("preferences", menu => $preferences);
+}
 
 my $queue;
 my $request_path = $HTML::Mason::Commands::r->path_info;
