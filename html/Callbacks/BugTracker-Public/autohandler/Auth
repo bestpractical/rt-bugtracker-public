@@ -53,7 +53,12 @@ if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
     and not defined $ARGS{user}
     and not defined $ARGS{pass} )
 {
-    if ( $m->request_comp->path =~ m{ ^/+Public/ }x ) {
+    my $path = $m->request_path;
+    my $has_public_equiv = RT::BugTracker::Public->RedirectToPublic(
+        Path => $path,
+        ARGS => \%ARGS,
+    );
+    if ( $path =~ m{ ^/+Public/ }x or $has_public_equiv ) {
         my $cu = new RT::CurrentUser;
         $cu->LoadByName( $RT::WebPublicUser );
         unless ( $cu->id ) {
@@ -62,11 +67,6 @@ if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
             RT::Interface::Web::InstantiateNewSession();
             $session{'CurrentUser'} = $cu;
         }
-    }
-    elsif ( $m->request_comp->path =~ '^(/+)Ticket/Display.html'
-                and $ARGS{'id'} )
-    {
-        $m->redirect( $RT::WebPath .'/Public/Bug/Display.html?id=' . $ARGS{'id'} );
     }
 }
 </%init>
