@@ -51,6 +51,7 @@ use strict;
 use warnings;
 
 package RT::BugTracker::Public;
+use URI::Escape qw/ uri_escape /;
 
 our $VERSION = '0.03_02';
 
@@ -97,6 +98,37 @@ sub IsPublicUser {
     return 1 if defined $session->{'BitcardUser'};
     return 1 if defined $session->{'CurrentUser'}->{'OpenID'};
     return 0;
+}
+
+sub RedirectToPublic {
+    my $self = shift;
+    my %args = @_;
+    my ($path, $ARGS) = @args{"Path", "ARGS"};
+
+    # The following logic is very similar to the default priv/unpriv logic for
+    # self service, which is disabled.
+
+    if ( $path =~ '^(/+)Ticket/Display.html' and $ARGS->{'id'} ) {
+        return "/Public/Bug/Display.html?id="
+                    . uri_escape($ARGS->{'id'});
+    }
+    elsif ( $path =~ '^(/+)Dist/Display.html' and ($ARGS->{'Name'} or $ARGS->{'Queue'}) ) {
+        return "/Public/Dist/Display.html?Name="
+                    . uri_escape($ARGS->{'Name'} || $ARGS->{'Queue'});
+    }
+    elsif ( $path =~ '^(/+)Dist/ByMaintainer.html' and $ARGS->{'Name'} ) {
+        return "/Public/Dist/ByMaintainer.html?Name="
+                    . uri_escape($ARGS->{'Name'});
+    }
+
+    # otherwise, drop the user at the Public default page
+    elsif (    $path !~ '^(/+)Public/'
+           and $path !~ RT->Config->Get('WebNoAuthRegex')
+           and $path !~ '^(/+)Ticket/Attachment/'
+           and $path !~ '^/+Helpers/Autocomplete/Queues' ) {
+        return "/Public/";
+    }
+    return undef;
 }
 
 =head1 AUTHOR
