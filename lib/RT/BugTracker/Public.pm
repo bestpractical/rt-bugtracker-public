@@ -55,6 +55,9 @@ use URI::Escape qw/ uri_escape /;
 
 our $VERSION = '0.03_02';
 
+RT->AddJavaScript("bugtracker-public.js");
+RT->AddStyleSheets("bugtracker-public.css");
+
 =head1 NAME
 
 RT::BugTracker::Public - Adds a public, (hopefully) userfriendly bug tracking UI to RT

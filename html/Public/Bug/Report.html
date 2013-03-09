@@ -48,6 +48,7 @@
 <& /Elements/Header, Title => loc("Report a bug in [_1]", $Queue) &>
 <& /Elements/Tabs &>
 
+<div class="reporting-a-bug-instructions">
 <p>
 Thanks for taking the time to report a bug in <em><% $Queue %></em>.  You
 should be aware that each and every module available through CPAN is free
@@ -63,17 +64,25 @@ deserves:
   <li>Be detailed.</li>
 </ul>
 
+<p>
+Try to include any information you think might help the developer isolate,
+reproduce and fix your problem.
+</p>
+</div>
+
+<div id="reporting-a-bug">
 % if ( $session{'CurrentUser'}->Name eq $RT::WebPublicUser ) {
 
-<p>
-  <strong>Due to spam, you must login with a Bitcard (or PAUSE) account to report a bug
-  via the web interface.  See the <a href="<% RT->Config->Get('WebPath') %>/NoAuth/Logout.html">front page</a> for details
-  on obtaining and logging in with a Bitcard account.</strong>
+<p style="font-weight: bold">
+  The quickest way to report a bug in <% $QueueObj->Name %> is by sending email to
+  <a style="font-size: 1.2em" href="#" data-bug-email="<% $QueueObj->Name %>">bug-<% $QueueObj->Name %> <i>[at]</i> rt.cpan.org</a>.
 </p>
 
-<p><strong>
-If you do not wish to register with Bitcard, please report your bug by sending email to: </strong>
-bug-<% $QueueObj->Name %> <i>[at]</i> rt.cpan.org.
+<p>
+  If you want to report a bug via the web, you must login with a Bitcard or
+  other account.  Accounts are required due to spam.
+  See the <a href="<% RT->Config->Get('WebPath') %>/NoAuth/Logout.html">login page</a> for details
+  on obtaining and logging in with a Bitcard account.
 </p>
 
 % } else {
@@ -147,12 +156,21 @@ bug-<% $QueueObj->Name %> <i>[at]</i> rt.cpan.org.
 % } else {
 <& /Elements/MessageBox, QuoteTransaction => $QuoteTransaction &>
 %}
-% }
-<p>
-Try to include any information you think might help the developer isolate,
-reproduce and fix your problem.
-</p>
+</td>
+</tr>
+<tr>
+<td align="RIGHT" colspan="2">
+</td>
+</tr>
+</table>
+<& /Elements/Submit, Label => loc("Create")&>
+</div>
 
+</form>
+% }
+</div>
+
+<div class="reporting-a-bug-instructions">
 <p>
 Be sure to include at least the following information:
 
@@ -173,19 +191,7 @@ Other things that are often helpful:
     <li>A patch against the latest released version of this distribution which fixes this bug.</li>
   </ul>
 </p>
-% if ( $session{'CurrentUser'}->Name ne $RT::WebPublicUser ) {
-</td>
-</tr>
-<tr>
-<td align="RIGHT" colspan="2">
-</td>
-</tr>
-</table>
-<& /Elements/Submit, Label => loc("Create")&>
 </div>
-
-</form>
-% }
 
 <%INIT>
 $Queue =~ s/::/-/g;
@@ -257,12 +263,7 @@ if ((!exists $ARGS{'AddMoreAttach'}) and (($ARGS{'id'} || '') eq 'new') and $Val
     $RT::Logger->crit("After display call; error is $@");
     $m->abort();
 }
-
-my $current_tab = "Public/Bug/Report.html"
-    ."?Queue=". $m->interp->apply_escapes($QueueObj->Name, 'u');
-
 </%INIT>
-
 <%ARGS>
 $DependsOn => undef
 $DependedOnBy => undef
