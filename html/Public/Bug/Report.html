@@ -72,6 +72,7 @@ reproduce and fix your problem.
 
 <div id="reporting-a-bug">
 
+<& /Dist/Elements/ShowBugtracker, Queue => $QueueObj &>
 <& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
 
 % if ( $session{'CurrentUser'}->Name eq $RT::WebPublicUser ) {
