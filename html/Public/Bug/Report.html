@@ -71,6 +71,9 @@ reproduce and fix your problem.
 </div>
 
 <div id="reporting-a-bug">
+
+<& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
+
 % if ( $session{'CurrentUser'}->Name eq $RT::WebPublicUser ) {
 
 <p style="font-weight: bold">
