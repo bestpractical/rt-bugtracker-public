@@ -51,6 +51,9 @@
 
 <& /Elements/ListActions, actions => \@Actions &>
 
+<& /Dist/Elements/ShowBugtracker, Queue => $TicketObj->QueueObj &>
+<& /Dist/Elements/ShowNotes, Queue => $TicketObj->QueueObj &>
+
 <&| /Widgets/TitleBox, title => loc("Report information") &>
 <& /Public/Bug/Elements/ShowSummary, Ticket => $TicketObj, Attachments => $attachments &>
 </&>
