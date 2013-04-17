@@ -34,7 +34,7 @@ if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
     Menu->child(
         'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
         escape_title  => 0,
-        sort_order    => 100,
+        sort_order    => 1000,
     );
 
     # Public user must logout to login
@@ -42,7 +42,7 @@ if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
         "login",
         title       => loc('Login as another user'),
         path        => '/NoAuth/Logout.html',
-        sort_order  => 101,
+        sort_order  => 1001,
     );
 } else {
     # Preserve core RT generated "Logged in as" menu for other authenticated
