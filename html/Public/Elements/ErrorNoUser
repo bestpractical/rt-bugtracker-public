@@ -45,11 +45,8 @@
 %# those contributions and any derivatives thereof.
 %# 
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Error") &>
-<& /Public/Elements/Tabs,
-        Title       => loc("Unable to find user"),
-        current_tab => '',
-        &>
+<& /Elements/Header, Title => loc("Unable to find user") &>
+<& /Elements/Tabs &>
 
 <p>
   The user you specified, <strong><% $Name %></strong>, could not be found.

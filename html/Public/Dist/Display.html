@@ -46,12 +46,9 @@
 %# 
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, Title => $title &>
+<& /Elements/Tabs &>
 
-<& /Public/Elements/Tabs,
-    Title => $title,
-    queue => $Name,
-    current_tab => $current_tab,
-&>
+<& /Dist/Elements/ShowBugtracker, Queue => $QueueObj &>
 
 <& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
 

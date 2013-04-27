@@ -47,6 +47,6 @@
 %# END BPS TAGGED BLOCK }}}
 <h3><% loc("Don't have an account but want to browse bugs?") %></h3>
 <p>
-<% loc('Use the <a href="[_1]">public interface</a>.', RT->Config->Get('WebBaseURL') .'/Public/?nossl=true' ) |n %>
+<% loc('Use the <a href="[_1]">public interface</a>.', RT->Config->Get('WebBaseURL') .'/Public/' ) |n %>
 <% loc('Want to report a bug? Send it in via e-mail.') %>
 </p>

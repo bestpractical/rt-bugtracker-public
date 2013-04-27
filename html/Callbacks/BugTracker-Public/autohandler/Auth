@@ -49,23 +49,29 @@
 # If there's no user and this is not a login request and we're looking
 # at a public UI request, log in automatically as the public user so the
 # person can get the rights of the system group "Everyone"
-if (    not $session{'CurrentUser'}
+if (    not ($session{'CurrentUser'} and $session{'CurrentUser'}->id)
     and not defined $ARGS{user}
     and not defined $ARGS{pass} )
 {
-    if ( $m->request_comp->path =~ m{ ^/+Public/ }x ) {
+    my $path = $m->request_path;
+    my $has_public_equiv = RT::BugTracker::Public->RedirectToPublic(
+        Path => $path,
+        ARGS => \%ARGS,
+    );
+
+    # We only care if the public equivalent is a page and not the top-level.
+    undef $has_public_equiv
+        if $has_public_equiv and $has_public_equiv eq "/Public/";
+
+    if ( $path =~ m{ ^/+Public/ }x or $has_public_equiv ) {
         my $cu = new RT::CurrentUser;
         $cu->LoadByName( $RT::WebPublicUser );
         unless ( $cu->id ) {
             $RT::Logger->error("Couldn't load public user with name '$RT::WebPublicUser'");
         } else {
+            RT::Interface::Web::InstantiateNewSession();
             $session{'CurrentUser'} = $cu;
         }
-    }
-    elsif ( $m->request_comp->path =~ '^(/+)Ticket/Display.html'
-                and $ARGS{'id'} )
-    {
-        $m->redirect( $RT::WebPath .'/Public/Bug/Display.html?id=' . $ARGS{'id'} );
     }
 }
 </%init>

@@ -48,31 +48,12 @@
 <%init>
 return unless RT::BugTracker::Public->IsPublicUser;
 
-# This is a public user, we only want them going to /Public/
+# This is a public user, we only want them going to /Public/ or other allowed paths.
 
-# The following logic is very similar to the priv/unpriv logic
-my $path = $m->request_path;
-
-# if the user is trying to access a ticket, redirect them
-if ( $path =~ '^(/+)Ticket/Display.html'
-        and $ARGS{'id'} )
-{
-    $m->redirect($RT::WebPath . "/Public/Bug/Display.html?id="
-                    . $m->interp->apply_escapes($ARGS{'id'}, 'u'));
-    $m->abort();
-}
-
-elsif ( $path =~ '^(/+)Dist/Display.html' and $ARGS{'Queue'} ) {
-    $m->redirect($RT::WebPath . "/Public/Dist/Display.html?Name="
-                    . $m->interp->apply_escapes($ARGS{'Queue'}, 'u'));
-}
-
-# otherwise, drop the user at the Public default page
-# XXX: don't we want to check against 'NoAuthRegexp' instead???
-elsif (    $path !~ '^(/+)Public/'
-       and $path !~ '^(/+)NoAuth/'
-       and $path !~ '^(/+)Ticket/Attachment/') {
-    $m->redirect($RT::WebPath . "/Public/");
-    $m->abort();
-}
+my $destination = RT::BugTracker::Public->RedirectToPublic(
+    Path => $m->request_path,
+    ARGS => \%ARGS,
+);
+$m->redirect( RT->Config->Get("WebPath") . $destination )
+    if $destination;
 </%init>

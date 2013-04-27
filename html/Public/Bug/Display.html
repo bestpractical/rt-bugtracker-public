@@ -47,12 +47,12 @@
 %# END BPS TAGGED BLOCK }}}
 <& /Elements/Header, 
     Title => $title &>
-<& /Public/Elements/Tabs, 
-    Title => $title,
-    ticket => $TicketObj,
-&>
+<& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@Actions &>
+
+<& /Dist/Elements/ShowBugtracker, Queue => $TicketObj->QueueObj &>
+<& /Dist/Elements/ShowNotes, Queue => $TicketObj->QueueObj &>
 
 <&| /Widgets/TitleBox, title => loc("Report information") &>
 <& /Public/Bug/Elements/ShowSummary, Ticket => $TicketObj, Attachments => $attachments &>
@@ -60,7 +60,7 @@
 
 <br />
 
-<& /Elements/Callback, _CallbackName => 'BeforeShowHistory', Ticket => $TicketObj, %ARGS &>
+% $m->callback(%ARGS, CallbackName => 'BeforeShowHistory', Ticket => $TicketObj);
 
 <& /Ticket/Elements/ShowHistory , 
       Ticket => $TicketObj, 
@@ -69,6 +69,7 @@
       ShowHeaders => $ARGS{'ShowHeaders'},
       Attachments => $attachments,
       AttachmentContent => $attachment_content,
+      URIFile     => RT->Config->Get('WebPath') . '/Public/Bug/Display.html',
       DisplayPath => RT->Config->Get('WebPath') . '/Public/Bug/Display.html?id='. $TicketObj->id,
       UpdatePath  => RT->Config->Get('WebPath') . '/Public/Bug/Update.html',
 &> 
@@ -82,7 +83,7 @@ $TicketObj => undef
 </%ARGS>
 
 <%INIT>
-$m->comp('/Elements/Callback', _CallbackName => 'Initial', TicketObj => $TicketObj, ARGSRef => \%ARGS);
+$m->callback(CallbackName => 'Initial', TicketObj => $TicketObj, ARGSRef => \%ARGS);
 
 my (@Actions, $Tickets);
 
@@ -162,7 +163,7 @@ if (@Actions) {
     $RT::Logger->error("Aborted. Should never be called");
 }
 
-$m->comp('/Elements/Callback', _CallbackName => 'BeforeDisplay',
+$m->callback(CallbackName => 'BeforeDisplay',
 	 TicketObj => \$TicketObj, Tickets => \$Tickets, ARGSRef => \%ARGS);
 
 
