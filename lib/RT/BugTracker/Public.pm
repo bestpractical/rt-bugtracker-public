@@ -123,11 +123,14 @@ sub RedirectToPublic {
         return "/Public/Dist/ByMaintainer.html?Name="
                     . uri_escape($ARGS->{'Name'});
     }
+    elsif ( $path =~ '^(/+)Ticket/Attachment/' ) {
+        # Proxying through a /Public/ url lets us auto-login users
+        return "/Public$path";
+    }
 
     # otherwise, drop the user at the Public default page
     elsif (    $path !~ '^(/+)Public/'
            and $path !~ RT->Config->Get('WebNoAuthRegex')
-           and $path !~ '^(/+)Ticket/Attachment/'
            and $path !~ '^/+Helpers/Autocomplete/Queues' ) {
         return "/Public/";
     }
