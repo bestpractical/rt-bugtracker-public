@@ -1,3 +1,8 @@
-0.02 Wed Mar 5 13:36:42 UTC 2008
+1.00 2014-12-15
+ - Packaging and documentation updates
 
-    * intial release to the CPAN
+0.05 2014-12-12
+ - RT 4.0 compaitibility
+
+0.02 2008-03-05
+ - initial release to the CPAN

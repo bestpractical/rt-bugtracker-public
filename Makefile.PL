@@ -2,9 +2,8 @@ use inc::Module::Install;
 
 RTx('RT-BugTracker-Public');
 
-all_from        ('lib/RT/BugTracker/Public.pm');
-readme_from     ('lib/RT/BugTracker/Public.pm');
-
 requires_rt('4.0.0');
+rt_too_new('4.2.0');
 
+sign();
 WriteAll();
