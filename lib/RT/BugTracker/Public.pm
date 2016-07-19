@@ -165,6 +165,20 @@ sub RedirectToPublic {
     return undef;
 }
 
+require RT::Interface::Web;
+%RT::Interface::Web::is_whitelisted_component = (
+    %RT::Interface::Web::is_whitelisted_component,
+    "/Public/Browse.html"            => 1,
+    "/Public/Dist/BeginsWith.html"   => 1,
+    "/Public/Dist/Browse.html"       => 1,
+    "/Public/Dist/ByMaintainer.html" => 1,
+    "/Public/Dist/Display.html"      => 1,
+    "/Public/Dist/bugs.tsv"          => 1,
+    "/Public/Search/Results.html"    => 1,
+    "/Public/Search/Simple.html"     => 1,
+    "/Public/index.html"             => 1,
+);
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
