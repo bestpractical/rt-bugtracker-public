@@ -53,7 +53,7 @@ use warnings;
 package RT::BugTracker::Public;
 use URI::Escape qw/ uri_escape /;
 
-our $VERSION = '1.00';
+our $VERSION = '1.05';
 
 RT->AddJavaScript("bugtracker-public.js");
 RT->AddStyleSheets("bugtracker-public.css");
