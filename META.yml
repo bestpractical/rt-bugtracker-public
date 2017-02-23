@@ -23,7 +23,7 @@ requires:
   perl: 5.8.3
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: '1.00'
+version: '1.05'
 x_module_install_rtx_version: '0.38'
 x_requires_rt: 4.0.0
 x_rt_too_new: 4.2.0
