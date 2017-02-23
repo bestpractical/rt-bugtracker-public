@@ -62,17 +62,13 @@
 
 % $m->callback(%ARGS, CallbackName => 'BeforeShowHistory', Ticket => $TicketObj);
 
-<& /Ticket/Elements/ShowHistory , 
-      Ticket => $TicketObj, 
-      Tickets => $Tickets, 
-      Collapsed => $ARGS{'Collapsed'}, 
+<& /Elements/ShowHistory ,
+      Object => $TicketObj,
+      Transactions => $TicketObj->Transactions,
       ShowHeaders => $ARGS{'ShowHeaders'},
       Attachments => $attachments,
-      AttachmentContent => $attachment_content,
-      URIFile     => RT->Config->Get('WebPath') . '/Public/Bug/Display.html',
-      DisplayPath => RT->Config->Get('WebPath') . '/Public/Bug/Display.html?id='. $TicketObj->id,
-      UpdatePath  => RT->Config->Get('WebPath') . '/Public/Bug/Update.html',
-&> 
+      AttachmentContent => $attachment_content
+&>
 
 <%ARGS>
 $id => undef
@@ -166,9 +162,8 @@ if (@Actions) {
 $m->callback(CallbackName => 'BeforeDisplay',
 	 TicketObj => \$TicketObj, Tickets => \$Tickets, ARGSRef => \%ARGS);
 
-
-my $attachments = $m->comp('/Ticket/Elements/FindAttachments', Ticket => $TicketObj, Tickets => $Tickets);
-my $attachment_content = $m->comp('/Ticket/Elements/LoadTextAttachments', Ticket => $TicketObj);
+my $attachments = $TicketObj->Attachments;
+my $attachment_content = $TicketObj->TextAttachments;
 
 my $title = loc(
     "Bug #[_1] for [_2]: [_3]",

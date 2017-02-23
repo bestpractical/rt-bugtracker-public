@@ -138,7 +138,7 @@ if ( $queue and $queue->id ) {
     );
 
     if ($ticket and $ticket->id
-        and $queue->Lifecycle->IsInactive($ticket->Status)
+        and $queue->LifecycleObj->IsInactive($ticket->Status)
         and $ticket->CurrentUserHasRight("OpenTicket")) {
 
         PageMenu->child(
