@@ -235,11 +235,12 @@ my $ticket = RT::Ticket->new($current_user); # empty ticket object
 
 # if no due date has been set explicitly, then use the
 # queue's default if it exists
-if ($QueueObj->DefaultDueIn && !$ARGS{'Due'}) {
+if ($RT::MAJOR_VERSION <= 4 && $RT::MINOR_VERSION <= 2
+    && $QueueObj->DefaultDueIn && !$ARGS{'Due'}) {
     my $default_due = RT::Date->new($session{'CurrentUser'});
     $default_due->SetToNow();
     $default_due->AddDays($QueueObj->DefaultDueIn);
-    $ARGS{'Due'} = $default_due->ISO();
+    $ARGS{'Due'} = $default_due->ISO(Timezone => 'user');
 }
 
 # {{{ deal with deleting uploaded attachments
