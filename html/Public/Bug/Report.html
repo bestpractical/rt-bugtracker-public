@@ -81,7 +81,7 @@ public and indexed by search engines.
 <& /Dist/Elements/ShowBugtracker, Queue => $QueueObj &>
 <& /Dist/Elements/ShowNotes, Queue => $QueueObj &>
 
-% if ( $session{'CurrentUser'}->Name eq $RT::WebPublicUser ) {
+% if ( $session{'CurrentUser'}->Name eq $RT::WebPublicUser && !RT->Config->Get("WebPublicUserReporting") ) {
 
 <p style="font-weight: bold">
   The quickest way to report a bug in <% $QueueObj->Name %> is by sending email to
