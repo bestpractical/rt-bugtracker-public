@@ -78,9 +78,7 @@ May need root permissions
 
 Add this line:
 
-    Set(@Plugins, qw(RT::BugTracker::Public));
-
-or add C<RT::BugTracker::Public> to your existing C<@Plugins> line.
+    Plugin('RT::BugTracker::Public');
 
 =item Clear your mason cache
 
