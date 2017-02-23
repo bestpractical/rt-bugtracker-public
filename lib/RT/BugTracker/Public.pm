@@ -115,6 +115,13 @@ The public user should probably be unprivileged and have the following rights
 If you want the public UI to do anything useful. It should NOT have the
 ModifySelf right.
 
+=head2 WebPublicUserReporting
+
+By default, the web public user cannot create bug reports through the
+web UI. To allow this, add this line:
+
+    Set($WebPublicUserReporting, 1);
+
 =cut
 
 sub IsPublicUser {
