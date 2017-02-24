@@ -50,7 +50,8 @@
 % }
 % $m->abort();
 <%INIT>
-$Dist =~ s/::/-/g;
+my %NameRegex = RT->Config->Get("DistributionToQueueRegex");
+$Dist =~ s/$NameRegex{Pattern}/$NameRegex{Substitution}/g;
 
 $r->content_type('text/plain');
 
