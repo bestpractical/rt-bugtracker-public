@@ -211,7 +211,8 @@ Other things that are often helpful:
 <%INIT>
 my $current_user = $session{'CurrentUser'};
 
-$Queue =~ s/::/-/g;
+my %NameRegex = RT->Config->Get("DistributionToQueueRegex");
+$Queue =~ s/$NameRegex{Pattern}/$NameRegex{Substitution}/g;
 
 my $QueueObj = RT::Queue->new($current_user);
 $QueueObj->Load($Queue);
