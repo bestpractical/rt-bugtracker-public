@@ -96,7 +96,7 @@ public and indexed by search engines.
 </p>
 
 % } else {
-<form action="<%$RT::WebPath%>/Public/Bug/Report.html" method="POST" enctype="multipart/form-data" name="TicketCreate">
+<form action="<% RT->Config->Get('WebPath') %>/Public/Bug/Report.html" method="POST" enctype="multipart/form-data" name="TicketCreate">
 <input type="hidden" class="hidden" name="id" value="new" />
 <input type="hidden" class="hidden" name="Status" value="new" />
 <div id="Ticket-Create-basics">
@@ -124,7 +124,12 @@ public and indexed by search engines.
 </tr>
 <tr>
 <td colspan="6">
-<& /Ticket/Elements/EditCustomFields, QueueObj => $QueueObj &>
+  <& /Elements/EditCustomFields,
+     Object => $ticket,
+     CustomFields => $CFs,
+     InTable => 1,
+     KeepValue => 1,
+  &>
 </td>
 </tr>
 % if ($TxnCFs->Count) {
@@ -204,9 +209,11 @@ Other things that are often helpful:
 </div>
 
 <%INIT>
+my $current_user = $session{'CurrentUser'};
+
 $Queue =~ s/::/-/g;
 
-my $QueueObj = new RT::Queue($session{'CurrentUser'});
+my $QueueObj = RT::Queue->new($current_user);
 $QueueObj->Load($Queue);
 
 if (not $QueueObj->Id) {
@@ -222,6 +229,8 @@ my $ValidCFs = $m->comp(
     CustomFields => $CFs,
     ARGSRef => \%ARGS
 );
+
+my $ticket = RT::Ticket->new($current_user); # empty ticket object
 
 # if no due date has been set explicitly, then use the
 # queue's default if it exists
