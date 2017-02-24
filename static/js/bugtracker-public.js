@@ -3,6 +3,6 @@ jQuery(function() {
         var a = jQuery(this);
         a.attr("href", "mailto:bug-"
                        + encodeURIComponent(a.attr("data-bug-email"))
-                       + "@rt.cpan.org");
+                       + "@" + RT.Config.WebDomain);
     });
 });

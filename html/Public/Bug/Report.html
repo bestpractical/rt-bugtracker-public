@@ -85,7 +85,7 @@ public and indexed by search engines.
 
 <p style="font-weight: bold">
   The quickest way to report a bug in <% $QueueObj->Name %> is by sending email to
-  <a style="font-size: 1.2em" href="#" data-bug-email="<% $QueueObj->Name %>">bug-<% $QueueObj->Name %> <i>[at]</i> rt.cpan.org</a>.
+  <a style="font-size: 1.2em" href="#" data-bug-email="<% $QueueObj->Name %>">bug-<% $QueueObj->Name %> <i>[at]</i> <% RT->Config->Get("WebDomain") %></a>.
 </p>
 
 <p>
