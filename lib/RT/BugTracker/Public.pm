@@ -60,7 +60,33 @@ RT->AddStyleSheets("bugtracker-public.css");
 
 =head1 NAME
 
-RT::BugTracker::Public - Adds a public, (hopefully) userfriendly bug tracking UI to RT
+RT::BugTracker::Public - Adds a public, user-friendly bug tracking and
+reporting UI to RT
+
+=head1 DESCRIPTION
+
+RT::BugTracker::Public depends on RT::BugTracker.
+
+RT::BugTracker::Public depends on RT::Authen::Bitcard and
+Authen::Bitcard for external authentication through Bitcard.
+
+NB: External authentication through Bitcard is broken in RT 4.2 and
+4.4. The authors may eventually deprecate this functionality.
+
+This extension adds a public interface for searching and reporting
+bugs through an RT with RT::BugTracker installed. The public reporting
+UI is disabled, by default.
+
+The public interface entrypoint is on the RT login page. Click the
+C<public interface> link to access the public bug search page. The
+public search functionality is identical to the private interface in
+RT::BugTracker.
+
+To enable public bug reporting, follow the documentation for
+C<WebPublicUserReporting>, in the C<CONFIGURATION> section, below. To
+report bugs, public users must create a new ticket using the C<New
+ticket in> button, or click C<Report a new bug> from the bug list page
+for a distribution.
 
 =head1 INSTALLATION
 
@@ -96,24 +122,29 @@ define options there.
 
 =head2 WebPublicUser
 
-Make sure to create the public user in your RT system and add the line below
-to your F<RT_SiteConfig.pm>.
+Create the public user in your RT system through F<Admin \> Users \>
+Create> in RT. The public user must be able to access RT, and it must
+be privileged so it can have rights. Do not enter an email address for
+the public user.
+
+Add the line below to F<RT_SiteConfig.pm> and replace 'guest' with the
+name of the RT user you just created.
 
     Set( $WebPublicUser, 'guest' );
 
-If you didn't name your public user 'guest', then change accordingly.
+The public user needs the following rights on public distribution
+queues to search bugs:
 
-The public user should probably be unprivileged and have the following rights
-
-    CreateTicket
-    ModifyCustomField
-    ReplyToTicket
     SeeCustomField
     SeeQueue
     ShowTicket
 
-If you want the public UI to do anything useful. It should NOT have the
-ModifySelf right.
+The pubic user needs the following rights on public distribution
+queues to report bugs:
+
+    CreateTicket
+    ModifyCustomField
+    ReplyToTicket
 
 =head2 WebPublicUserReporting
 
