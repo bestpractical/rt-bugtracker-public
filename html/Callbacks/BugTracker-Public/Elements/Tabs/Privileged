@@ -75,7 +75,7 @@ Menu()->child(
     path        => '/Public/Dist/Browse.html',
 );
 
-Menu->child( "about", menu => $about );
+Menu->child( "about", menu => $about ) if $about;
 
 if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
     Menu->child(
