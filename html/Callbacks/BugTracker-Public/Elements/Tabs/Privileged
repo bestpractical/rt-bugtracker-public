@@ -78,11 +78,16 @@ Menu()->child(
 Menu->child( "about", menu => $about ) if $about;
 
 if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
-    Menu->child(
-        'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
-        escape_title  => 0,
-        sort_order    => 1000,
-    );
+
+    # This creates a welcome message that reminds the current user they are logged
+    # in as a guest. However, it renders as a link with no target
+    # because RT doesn't currently support menu items that don't link somewhere.
+    # Comment out until RT's menus support a 'no-link' option.
+#    Menu->child(
+#        'preferences' => title => loc( 'Welcome [_1]anonymous guest[_2].', '<span class="current-user">', '</span>' ),
+#        escape_title  => 0,
+#        sort_order    => 1000,
+#    );
 
     # Public user must logout to login
     Menu->child(
