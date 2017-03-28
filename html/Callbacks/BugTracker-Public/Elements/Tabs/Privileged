@@ -92,7 +92,7 @@ if ($session{CurrentUser}->Name eq RT->Config->Get("WebPublicUser")) {
     # Public user must logout to login
     Menu->child(
         "login",
-        title       => loc('Login as another user'),
+        title       => loc('Log out guest user'),
         path        => '/NoAuth/Logout.html',
         sort_order  => 1001,
     );
