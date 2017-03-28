@@ -45,8 +45,6 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<h3><% loc("Don't have an account but want to browse bugs?") %></h3>
-<p>
-<% loc('Use the <a href="[_1]">public interface</a>.', RT->Config->Get('WebBaseURL') .'/Public/' ) |n %>
-<% loc('Want to report a bug? Send it in via e-mail.') %>
-</p>
+
+<% $m->comp( '/Elements/ScrubHTML',
+    Content => RT::BugTracker::Public::GetArticleContent('AfterLoginForm')) |n %>
