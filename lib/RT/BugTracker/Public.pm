@@ -215,6 +215,54 @@ require RT::Interface::Web;
     "/Public/index.html"             => 1,
 );
 
+=head2 GetArticleContent
+
+Searches in articles for content for various configurable pages in the BugTracker
+interface. The article names are available for adding custom
+content in the listed locations. To customize, create or edit the article with the
+listed name.
+
+=over
+
+=item * AfterLoginForm
+
+Location: Login page, below username/password fields
+
+=back
+
+=cut
+
+sub GetArticleContent {
+    my $article_name = shift;
+
+    my $Class = RT::Class->new( RT->SystemUser );
+    my ($ret, $msg) = $Class->Load('BugTracker Pages');
+
+    unless ( $ret and $Class->Id ){
+        RT::Logger->warning('Unable to load BugTracker Pages class for articles');
+        return '';
+    }
+
+    my $Article = RT::Article->new( RT->SystemUser );
+    ($ret, $msg) = $Article->LoadByCols( Name => $article_name, Class => $Class->Id );
+
+    unless ($ret and $Article->id){
+        RT::Logger->debug("No article found for " . $article_name);
+        return '';
+    }
+
+    RT::Logger->debug("Found article id: " . $Article->Id);
+    my $class = $Article->ClassObj;
+    my $cfs = $class->ArticleCustomFields;
+
+    while (my $cf = $cfs->Next) {
+        my $values = $Article->CustomFieldValues($cf->Id);
+        my $value = $values->First;
+        return $value->Content;
+    }
+    return;
+}
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
