@@ -50,6 +50,7 @@
 
 <& /Elements/ListActions, actions => \@results &>
 
+% unless (RT->Config->Get('BugTracker_ShowAllDistributions')) {
 <p>
   <form action="<% RT->Config->Get('WebPath') %><% $m->request_path %>" method="get">
     <label for="form-dist-name"><&|/l&>Find a distribution by full name:</&></label>
@@ -65,6 +66,7 @@
     <input type="submit" class="button" value="<&|/l&>Search</&>" />
   </form>
 </p>
+% }
 
 <p>
   <form action="/Public/Search/Simple.html" method="get">
@@ -75,6 +77,14 @@
 
   <&|/l&>This search looks for bug report IDs, distribution names, usernames, and bug report descriptions among other fields.</&>
 </p>
+
+% if (RT->Config->Get('BugTracker_ShowAllDistributions')) {
+<h2><&|/l&>Distributions</&></h2>
+
+% my $queues = RT::Queues->new($session{CurrentUser});
+% $queues->UnLimit;
+    <& /Public/Elements/DistributionList, queues => $queues &>
+% }
 <%ARGS>
 $Distribution => ''
 $Maintainer   => ''
