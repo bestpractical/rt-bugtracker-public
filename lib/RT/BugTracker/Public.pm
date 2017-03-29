@@ -153,6 +153,14 @@ web UI. To allow this, add this line:
 
     Set($WebPublicUserReporting, 1);
 
+=head2 WebPublicUserQueryBuilder
+
+By default, the web public user cannot use RT's fully-featured query builder
+and is limited instead to simple search. To allow access to the query
+builder, add this line:
+
+    Set($WebPublicUserQueryBuilder, 1);
+
 =cut
 
 sub IsPublicUser {

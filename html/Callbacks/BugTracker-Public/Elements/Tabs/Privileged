@@ -72,6 +72,13 @@ Menu()->child(
     path        => '/Public/',
 );
 
+if (RT->Config->Get('WebPublicUserQueryBuilder')) {
+    Menu()->child(
+        query_builder => title => loc('Advanced Search'),
+        path        => '/Search/Build.html?NewQuery=1',
+    );
+}
+
 unless (RT->Config->Get('BugTracker_ShowAllDistributions')) {
     Menu()->child(
         browse_dist => title => loc('Browse Distributions'),
