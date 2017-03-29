@@ -70,10 +70,12 @@ Menu()->child(
     path        => '/Public/',
 );
 
-Menu()->child(
-    browse_dist => title => loc('Browse Distributions'),
-    path        => '/Public/Dist/Browse.html',
-);
+unless (RT->Config->Get('BugTracker_ShowAllDistributions')) {
+    Menu()->child(
+        browse_dist => title => loc('Browse Distributions'),
+        path        => '/Public/Dist/Browse.html',
+    );
+}
 
 Menu->child( "about", menu => $about ) if $about;
 
