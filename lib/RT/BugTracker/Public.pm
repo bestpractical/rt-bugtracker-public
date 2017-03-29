@@ -192,8 +192,13 @@ sub RedirectToPublic {
         return "/Public$path";
     }
 
+    elsif ( RT->Config->Get('WebPublicUserQueryBuilder')) {
+        return undef if $path =~ '^/+Search/Build.html'
+                     || $path =~ '^/+Search/Results.html'
+    }
+
     # otherwise, drop the user at the Public default page
-    elsif (    $path !~ '^(/+)Public/'
+    if (       $path !~ '^(/+)Public/'
            and $path !~ RT->Config->Get('WebNoAuthRegex')
            and $path !~ '^/+Helpers/Autocomplete/Queues' ) {
         return "/Public/";
