@@ -100,6 +100,8 @@ for a distribution.
 
 May need root permissions
 
+=item C<make initdb>
+
 =item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
 
 Add this line:
