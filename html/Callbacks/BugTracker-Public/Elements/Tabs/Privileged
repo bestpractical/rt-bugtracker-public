@@ -62,8 +62,10 @@ RT::Interface::Web::InitializeMenu();
 PageWidgets()->child( simple_search => raw_html => $m->scomp(
     '/Elements/SimpleSearch', SendTo => '/Public/Search/Simple.html' ));
 
-PageWidgets()->child( create_ticket => raw_html => $m->scomp(
-    '/Elements/CreateTicket', SendTo => '/Public/Bug/Report.html' ));
+if (RT->Config->Get('WebPublicUserReporting')) {
+    PageWidgets()->child( create_ticket => raw_html => $m->scomp(
+        '/Elements/CreateTicket', SendTo => '/Public/Bug/Report.html' ));
+}
 
 Menu()->child(
     search_dist => title => loc('Search Distributions'),
@@ -139,10 +141,12 @@ if ( $queue and $queue->id ) {
             path  => "/Public/Dist/Display.html?Status=Rejected;Name=". $escaped,
     );
 
-    PageMenu()->child( report => 
-            title => loc("Report a new bug"),
-            path  => '/Public/Bug/Report.html?Queue='. $escaped,
-    );
+    if (RT->Config->Get('WebPublicUserReporting')) {
+        PageMenu()->child( report =>
+                title => loc("Report a new bug"),
+                path  => '/Public/Bug/Report.html?Queue='. $escaped,
+        );
+    }
 
     if ($ticket and $ticket->id
         and $queue->LifecycleObj->IsInactive($ticket->Status)
