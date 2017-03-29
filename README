@@ -32,6 +32,7 @@ INSTALLATION
     make install
         May need root permissions
 
+    make initdb
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         Add this line:
 
@@ -77,6 +78,23 @@ CONFIGURATION
     web UI. To allow this, add this line:
 
         Set($WebPublicUserReporting, 1);
+
+  WebPublicUserQueryBuilder
+    By default, the web public user cannot use RT's fully-featured query
+    builder and is limited instead to simple search. To allow access to the
+    query builder, add this line:
+
+        Set($WebPublicUserQueryBuilder, 1);
+
+  GetArticleContent
+    Searches in articles for content for various configurable pages in the
+    BugTracker interface. The article names are available for adding custom
+    content in the listed locations. To customize, create or edit the
+    article with the listed name.
+
+    *   AfterLoginForm
+
+        Location: Login page, below username/password fields
 
 AUTHOR
     Best Practical Solutions, LLC <modules@bestpractical.com>
