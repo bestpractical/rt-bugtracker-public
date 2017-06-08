@@ -2,3 +2,5 @@
 
 Set($WebPublicUser, 'public');
 Set($WebPublicUserReporting, 0);
+Set($WebPublicUserSortResults, 0);
+

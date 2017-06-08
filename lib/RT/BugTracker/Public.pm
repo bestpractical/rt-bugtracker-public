@@ -163,6 +163,13 @@ builder, add this line:
 
     Set($WebPublicUserQueryBuilder, 1);
 
+=head2 WebPublicUserSortResults
+
+By default, the web public user cannot click column headers to re-sort search
+results due to performance implications. To permit this, add this line:
+
+    Set($WebPublicUserSortResults, 1);
+
 =cut
 
 sub IsPublicUser {
