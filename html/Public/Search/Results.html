@@ -49,7 +49,7 @@
 <& /Elements/Tabs &>
 <& /Elements/CollectionList,
     Query           => $ARGS{Query},
-    AllowSorting    => 0,
+    AllowSorting    => RT->Config->Get('WebPublicUserSortResults'),
     OrderBy         => 'id',
     Order           => 'ASC',
     Rows            => 50,
