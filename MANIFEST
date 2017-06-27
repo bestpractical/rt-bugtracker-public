@@ -1,6 +1,6 @@
 Changes
+etc/BugTrackerPublic_Config.pm
 etc/initialdata
-etc/RT_SiteConfig.pm
 html/Callbacks/BugTracker-Public/autohandler/Auth
 html/Callbacks/BugTracker-Public/autohandler/Default
 html/Callbacks/BugTracker-Public/autohandler/Final
