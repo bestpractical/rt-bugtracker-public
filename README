@@ -86,6 +86,24 @@ CONFIGURATION
 
         Set($WebPublicUserQueryBuilder, 1);
 
+  WebPublicUserSortResults
+    By default, the web public user cannot click column headers to re-sort
+    search results due to performance implications. To permit this, add this
+    line:
+
+        Set($WebPublicUserSortResults, 1);
+
+  ScrubInlineArticleContent
+    By default, inline articles such as AfterLoginForm are scrubbed for
+    unsafe HTML tags just like ticket correspondence. If your articles are
+    modifiable only by trusted users, you may set this to 0 to pass through
+    article content unscrubbed.
+
+    See the documentation below for "GetArticleContent" for more
+    information.
+
+        Set($ScrubInlineArticleContent, 0);
+
   GetArticleContent
     Searches in articles for content for various configurable pages in the
     BugTracker interface. The article names are available for adding custom

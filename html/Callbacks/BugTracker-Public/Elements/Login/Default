@@ -46,5 +46,9 @@
 %#
 %# END BPS TAGGED BLOCK }}}
 
-<% $m->comp( '/Elements/ScrubHTML',
+% if (RT->Config->Get('ScrubInlineArticleContent')) {
+  <% $m->comp( '/Elements/ScrubHTML',
     Content => RT::BugTracker::Public::GetArticleContent('AfterLoginForm')) |n %>
+% } else {
+  <% RT::BugTracker::Public::GetArticleContent('AfterLoginForm') |n %>
+% }
