@@ -170,6 +170,17 @@ results due to performance implications. To permit this, add this line:
 
     Set($WebPublicUserSortResults, 1);
 
+=head2 ScrubInlineArticleContent
+
+By default, inline articles such as AfterLoginForm are scrubbed for unsafe
+HTML tags just like ticket correspondence. If your articles are modifiable
+only by trusted users, you may set this to 0 to pass through article content
+unscrubbed.
+
+See the documentation below for L</GetArticleContent> for more information.
+
+    Set($ScrubInlineArticleContent, 0);
+
 =cut
 
 sub IsPublicUser {
