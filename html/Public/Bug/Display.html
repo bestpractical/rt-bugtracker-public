@@ -67,7 +67,8 @@
       Transactions => $TicketObj->Transactions,
       ShowHeaders => $ARGS{'ShowHeaders'},
       Attachments => $attachments,
-      AttachmentContent => $attachment_content
+      AttachmentContent => $attachment_content,
+      AttachmentPath => RT->Config->Get('WebPath')."/Ticket/Attachment",
 &>
 
 <%ARGS>
