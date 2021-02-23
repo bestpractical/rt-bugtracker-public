@@ -235,8 +235,8 @@ sub RedirectToPublic {
 }
 
 require RT::Interface::Web;
-%RT::Interface::Web::is_whitelisted_component = (
-    %RT::Interface::Web::is_whitelisted_component,
+%RT::Interface::Web::IS_WHITELISTED_COMPONENT = (
+    %RT::Interface::Web::IS_WHITELISTED_COMPONENT,
     "/Public/Browse.html"            => 1,
     "/Public/Dist/BeginsWith.html"   => 1,
     "/Public/Dist/Browse.html"       => 1,
