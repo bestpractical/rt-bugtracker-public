@@ -296,6 +296,36 @@ sub GetArticleContent {
     return;
 }
 
+# "public" UsernameFormat
+package RT::User;
+
+sub _FormatUserPublic
+{
+    my $self = shift;
+    my %args = @_;
+    my $session = \%HTML::Mason::Commands::session;
+
+    if (!$args{User} && $args{Address}) {
+        $args{User} = RT::User->new( $session->{'CurrentUser'} );
+        $args{User}->LoadByEmail($args{Address}->address);
+        if ($args{User}->Id) {
+            $args{Address} = '';
+        } else {
+            $args{Address} = $args{Address}->address;
+        }
+    } else {
+        $args{Address} = $args{User}->EmailAddress;
+    }
+    if ( $args{Address} && RT::BugTracker::Public->IsPublicUser ) {
+        $args{Address} =~ s/@/ [...] /;
+    }
+
+    return $args{Address} || $args{User}->RealName || $args{User}->Name;
+}
+
+# Switch back to original package
+package RT::BugTracker::Public;
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
