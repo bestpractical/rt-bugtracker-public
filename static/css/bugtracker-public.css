@@ -20,13 +20,3 @@
         clear: both;
     }
 }
-
-#reporting-a-bug .edit-custom-field {
-    /* we're in a thinner column most of the time, make room for the default margin */
-    width: 45%;
-}
-
-#reporting-a-bug .edit-custom-field:first-child {
-    display: block;
-    float: none;
-}
