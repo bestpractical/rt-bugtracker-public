@@ -135,7 +135,7 @@ if ( $queue and $queue->id ) {
     my $escaped = $m->interp->apply_escapes($queue->Name, 'u');
     PageMenu()->child(
         active_bugs => title => loc("Active bugs"),
-        path => "/Public/Dist/Display.html?Status=Active;Name=" . $escaped,
+        path => "/Public/Dist/Display.html?Status=__Active__;Name=" . $escaped,
     );
 
     PageMenu()->child( resolved_bugs =>
