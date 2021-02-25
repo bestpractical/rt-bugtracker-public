@@ -45,23 +45,25 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<div class="dist-list">
-<ul>
+<div class="dist-list row mt-2">
+  <div class="col-6">
+    <ul class="list-group">
 % my $count  = $queues->Count;
 % my $broken = 0;
 %
 % while (my $queue = $queues->Next) {
-% 
+%
 %     if ($count > 10
 %           and not $broken
 %           and $queues->_ItemsCounter >= $count / 2)
 %     {
 %         $broken = 1;
-</ul>
-
-<ul>
+    </ul>
+  </div>
+  <div class="col-6">
+    <ul class="list-group">
 %     }
-  <li>
+  <li class="list-group-item">
     <span class="dist-actions">
       <a href="<% $RT::WebPath %>/Public/Dist/Display.html?Name=<% $queue->Name |u %>">Bug list</a>
 % if (RT->Config->Get('WebPublicUserReporting')) {
@@ -72,7 +74,8 @@
     <strong><% $queue->Name %></strong>
   </li>
 % }
-</ul>
+    </ul>
+  </div>
 </div>
 
 <%args>
