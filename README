@@ -33,13 +33,13 @@ INSTALLATION
         May need root permissions
 
     make initdb
-    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+    Edit your /opt/rt5/etc/RT_SiteConfig.pm
         Add this line:
 
             Plugin('RT::BugTracker::Public');
 
     Clear your mason cache
-            rm -rf /opt/rt4/var/mason_data/obj
+            rm -rf /opt/rt5/var/mason_data/obj
 
     Restart your webserver
 
