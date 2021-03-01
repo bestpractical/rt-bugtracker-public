@@ -10,7 +10,6 @@ html/Callbacks/BugTracker-Public/NoAuth/Logout.html/AfterSessionDelete
 html/Callbacks/BugTracker-Public/NoAuth/Logout.html/Default
 html/Callbacks/BugTracker-Public/Search/Results.html/Initial
 html/Callbacks/BugTracker-Public/Ticket/Elements/ShowMessageHeaders/Default
-html/Elements/ShowUserPublic
 html/Public/autohandler
 html/Public/Browse.html
 html/Public/Bug/Display.html
@@ -43,7 +42,6 @@ inc/Module/Install/RTx.pm
 inc/Module/Install/RTx/Runtime.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
-inc/unicore/Name.pm
 inc/YAML/Tiny.pm
 lib/RT/BugTracker/Public.pm
 Makefile.PL
