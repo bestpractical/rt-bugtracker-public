@@ -1,3 +1,6 @@
+1.09 2021-03-15
+ - Migrate to RT 5
+
 1.07 2017-03-29
  - Add WebPublicUserQueryBuilder config setting
  - Have WebPublicUserReporting hide create/reply UI more consistently
